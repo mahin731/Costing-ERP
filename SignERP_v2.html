@@ -1,0 +1,2636 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SignERP v2 — Professional Soft Signage ERP</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.47.0/tabler-icons.min.css">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#f0f2f5;--surface:#ffffff;--surface2:#f8f9fa;--surface3:#e9ecef;
+  --border:#dee2e6;--border2:#ced4da;
+  --text:#212529;--text2:#495057;--text3:#868e96;
+  --accent:#1971c2;--accent2:#1864ab;--accent-bg:#e7f5ff;
+  --success:#2f9e44;--success-bg:#ebfbee;
+  --warn:#e67700;--warn-bg:#fff9db;
+  --danger:#c92a2a;--danger-bg:#fff5f5;
+  --purple:#7048e8;--purple-bg:#f3f0ff;
+  --teal:#0c8599;--teal-bg:#e3fafc;
+  --r:8px;--rl:12px;
+}
+@media(prefers-color-scheme:dark){:root{
+  --bg:#0d0e12;--surface:#161719;--surface2:#1e2024;--surface3:#26282e;
+  --border:#2e3036;--border2:#3d4047;
+  --text:#c9cacf;--text2:#9a9da4;--text3:#56585f;
+  --accent:#4dabf7;--accent2:#339af0;--accent-bg:#1971c218;
+  --success:#51cf66;--success-bg:#2f9e4418;
+  --warn:#fcc419;--warn-bg:#e6770018;
+  --danger:#ff6b6b;--danger-bg:#c92a2a18;
+  --purple:#9775fa;--purple-bg:#7048e818;
+  --teal:#22b8cf;--teal-bg:#0c859918;
+}}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-size:14px;background:var(--bg);color:var(--text);line-height:1.5;min-height:100vh}
+input,select,textarea{background:var(--surface);border:1px solid var(--border2);border-radius:var(--r);color:var(--text);font-size:13px;padding:6px 10px;font-family:inherit;width:100%;transition:border .15s,box-shadow .15s}
+input:focus,select:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-bg)}
+input[type=checkbox]{width:auto;cursor:pointer;accent-color:var(--accent)}
+button{cursor:pointer;font-family:inherit;font-size:13px;border-radius:var(--r);padding:7px 14px;transition:all .15s;display:inline-flex;align-items:center;gap:5px;white-space:nowrap}
+.btn-primary{background:var(--accent);color:#fff;border:1px solid var(--accent);font-weight:500}
+.btn-primary:hover{background:var(--accent2)}
+.btn-secondary{background:var(--surface);color:var(--text2);border:1px solid var(--border2)}
+.btn-secondary:hover{background:var(--surface2)}
+.btn-success{background:var(--success);color:#fff;border:1px solid var(--success)}
+.btn-success:hover{filter:brightness(.92)}
+.btn-danger{background:var(--danger);color:#fff;border:1px solid var(--danger)}
+.btn-ghost{background:transparent;border:none;color:var(--text3);padding:5px 8px}
+.btn-ghost:hover{background:var(--surface2);color:var(--text)}
+.btn-sm{padding:4px 10px;font-size:12px}
+label{font-size:12px;font-weight:500;color:var(--text2);display:block;margin-bottom:4px}
+/* Layout */
+.layout{display:flex;height:100vh;overflow:hidden}
+.sidebar{width:224px;min-width:224px;background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;overflow-y:auto;flex-shrink:0}
+.sb-brand{padding:16px 14px 12px;border-bottom:1px solid var(--border)}
+.sb-brand h1{font-size:15px;font-weight:700;color:var(--text);display:flex;align-items:center;gap:7px}
+.sb-brand p{font-size:11px;color:var(--text3);margin-top:2px}
+.nav-sec{font-size:10px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.9px;padding:14px 14px 4px}
+.nav-item{display:flex;align-items:center;gap:8px;padding:8px 14px;cursor:pointer;color:var(--text2);font-size:13px;border:none;background:none;width:100%;text-align:left;border-right:2px solid transparent}
+.nav-item:hover{background:var(--surface2);color:var(--text)}
+.nav-item.active{background:var(--accent-bg);color:var(--accent);font-weight:500;border-right-color:var(--accent)}
+.nav-item i{font-size:15px;width:18px;flex-shrink:0}
+/* Main */
+.main{flex:1;display:flex;flex-direction:column;overflow:hidden;min-width:0}
+.topbar{background:var(--surface);border-bottom:1px solid var(--border);padding:10px 20px;display:flex;align-items:center;justify-content:space-between;gap:10px;flex-shrink:0}
+.topbar-title{font-size:14px;font-weight:600;color:var(--text)}
+.topbar-right{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.content{flex:1;overflow-y:auto;padding:20px}
+/* Pages */
+.page{display:none}.page.active{display:block}
+/* Cards */
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--rl);padding:16px;margin-bottom:14px}
+.card:last-child{margin-bottom:0}
+.card-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;padding-bottom:10px;border-bottom:1px solid var(--border);gap:8px}
+.card-title{font-size:13px;font-weight:600;color:var(--text);display:flex;align-items:center;gap:6px}
+.card-title i{font-size:15px;color:var(--accent)}
+/* Grids */
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
+.g4{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.g5{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}
+/* Steps */
+.steps{display:flex;align-items:center;background:var(--surface);border:1px solid var(--border);border-radius:var(--rl);padding:4px;gap:2px;margin-bottom:16px;flex-wrap:wrap}
+.step{display:flex;align-items:center;gap:6px;padding:7px 10px;border-radius:var(--r);font-size:12px;font-weight:500;cursor:pointer;color:var(--text3);flex:1;justify-content:center;min-width:80px}
+.step.active{background:var(--accent-bg);color:var(--accent)}
+.step.done{color:var(--success)}
+.snum{width:18px;height:18px;border-radius:50%;background:var(--surface3);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0}
+.step.active .snum{background:var(--accent);color:#fff}
+.step.done .snum{background:var(--success);color:#fff}
+/* Metrics */
+.mc{background:var(--surface2);border:1px solid var(--border);border-radius:var(--r);padding:12px;text-align:center}
+.mc-lbl{font-size:10px;color:var(--text3);font-weight:600;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
+.mc-val{font-size:20px;font-weight:700;color:var(--text);line-height:1.2}
+.mc-sub{font-size:11px;color:var(--text3);margin-top:2px}
+.mc.green .mc-val{color:var(--success)}.mc.blue .mc-val{color:var(--accent)}
+.mc.orange .mc-val{color:var(--warn)}.mc.purple .mc-val{color:var(--purple)}
+.mc.teal .mc-val{color:var(--teal)}.mc.red .mc-val{color:var(--danger)}
+/* Form */
+.fg{margin-bottom:10px}
+.fg-row{display:flex;gap:8px;align-items:flex-end}
+.fg-row .fg{flex:1;margin-bottom:0}
+/* Tables */
+.tbl{width:100%;border-collapse:collapse;font-size:13px}
+.tbl th{background:var(--surface2);font-weight:600;color:var(--text2);font-size:11px;text-transform:uppercase;letter-spacing:.4px;padding:8px 10px;text-align:left;border-bottom:2px solid var(--border);white-space:nowrap}
+.tbl td{padding:7px 10px;border-bottom:1px solid var(--border);color:var(--text);vertical-align:middle}
+.tbl tbody tr:last-child td{border-bottom:none}
+.tbl tbody tr:hover td{background:var(--surface2)}
+.tbl .num{text-align:right;font-variant-numeric:tabular-nums}
+.tbl tr.sub td{font-weight:600;background:var(--surface2)}
+.tbl tr.grand td{font-weight:700;background:var(--accent-bg);color:var(--accent)}
+/* Badges */
+.badge{display:inline-block;font-size:11px;font-weight:600;padding:2px 7px;border-radius:20px;white-space:nowrap}
+.bg-green{background:var(--success-bg);color:var(--success)}
+.bg-blue{background:var(--accent-bg);color:var(--accent)}
+.bg-orange{background:var(--warn-bg);color:var(--warn)}
+.bg-red{background:var(--danger-bg);color:var(--danger)}
+.bg-purple{background:var(--purple-bg);color:var(--purple)}
+.bg-teal{background:var(--teal-bg);color:var(--teal)}
+.bg-gray{background:var(--surface3);color:var(--text3)}
+/* Progress */
+.pbar{height:5px;background:var(--surface3);border-radius:3px;overflow:hidden}
+.pfill{height:100%;border-radius:3px;transition:width .4s}
+/* Alerts */
+.alert{padding:9px 12px;border-radius:var(--r);font-size:12px;margin-bottom:10px;display:flex;align-items:flex-start;gap:8px;line-height:1.5}
+.alert i{flex-shrink:0;font-size:14px;margin-top:1px}
+.a-info{background:var(--accent-bg);color:var(--accent)}
+.a-warn{background:var(--warn-bg);color:var(--warn)}
+.a-ok{background:var(--success-bg);color:var(--success)}
+.a-err{background:var(--danger-bg);color:var(--danger)}
+/* Section divider */
+.sdiv{font-size:10px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.8px;margin:16px 0 8px;display:flex;align-items:center;gap:8px}
+.sdiv::after{content:'';flex:1;height:1px;background:var(--border)}
+/* Tags */
+.tag{display:inline-flex;align-items:center;gap:4px;font-size:11px;padding:3px 8px;border-radius:20px;background:var(--surface2);color:var(--text2);border:1px solid var(--border)}
+/* Modal */
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,.52);z-index:200;display:none;align-items:center;justify-content:center;padding:20px}
+.overlay.open{display:flex}
+.modal{background:var(--surface);border-radius:var(--rl);border:1px solid var(--border);width:580px;max-width:100%;max-height:88vh;overflow-y:auto;padding:22px;box-shadow:0 24px 64px rgba(0,0,0,.35)}
+.modal-hdr{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid var(--border)}
+.modal-title{font-size:14px;font-weight:600}
+/* Tabs */
+.tabs{display:flex;gap:0;border-bottom:2px solid var(--border);margin-bottom:14px}
+.tab{padding:8px 16px;font-size:12px;font-weight:500;color:var(--text3);background:none;border:none;cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-2px;transition:color .15s}
+.tab.active{color:var(--accent);border-bottom-color:var(--accent)}
+.tab-pane{display:none}.tab-pane.active{display:block}
+/* Bin visual */
+.bins{display:flex;flex-direction:column;gap:5px;margin-top:8px}
+.bin-row{display:flex;align-items:center;gap:6px}
+.bin-lbl{width:56px;font-size:10px;color:var(--text3);flex-shrink:0}
+.bin-track{flex:1;height:26px;background:var(--surface3);border-radius:4px;display:flex;overflow:hidden}
+.bin-cut{height:100%;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;color:rgba(255,255,255,.95);border-right:2px solid var(--surface)}
+.bin-scrap{height:100%;display:flex;align-items:center;justify-content:center;font-size:9px;color:var(--text3);flex:1}
+.bin-info{width:64px;text-align:right;font-size:10px;color:var(--text3);flex-shrink:0}
+/* LED diagram */
+.led-diag{background:var(--surface3);border:1px solid var(--border);border-radius:var(--r);overflow-x:auto;padding:8px;margin-top:8px}
+/* Print */
+@media print{
+  /* ── Reset layout constraints that clip content ── */
+  *{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important;color-adjust:exact!important}
+  html,body{height:auto!important;overflow:visible!important;background:#fff!important}
+  .layout{display:block!important;height:auto!important;overflow:visible!important}
+  .sidebar,.topbar,.no-print,.step-bar,.page:not(.active){display:none!important}
+  .main{display:block!important;height:auto!important;overflow:visible!important}
+  .content{display:block!important;height:auto!important;overflow:visible!important;padding:0!important}
+  /* ── Make the active page (cost sheet) fully expand ── */
+  .page.active{display:block!important;height:auto!important;overflow:visible!important}
+  /* ── Cards & tables must not clip ── */
+  .card{break-inside:avoid;overflow:visible!important;margin-bottom:12pt;border:1px solid #ddd!important;box-shadow:none!important}
+  .tbl{width:100%;border-collapse:collapse;font-size:10pt}
+  .tbl th,.tbl td{border:1px solid #ccc!important;padding:4pt 6pt!important}
+  /* ── Cost sheet layout ── */
+  .cs-wrap{padding:0!important}
+  .cs-header{display:flex;justify-content:space-between;margin-bottom:12pt;padding-bottom:8pt;border-bottom:2pt solid #333}
+  .cs-logo{font-size:16pt;font-weight:800}
+  /* ── Prevent section cards from splitting across pages ── */
+  .card-title{font-weight:700;font-size:10pt;margin-bottom:4pt}
+  /* ── Two-column summary grid must flatten on narrow paper ── */
+  [style*="grid-template-columns:1fr 1fr"]{display:block!important}
+  [style*="grid-template-columns:1fr 1fr"] > *{margin-bottom:8pt}
+  /* ── Metric cards: show as inline-block row ── */
+  .g4,.g5,.metric-grid{display:block!important}
+  .mc{display:inline-block;min-width:100pt;margin:2pt 4pt;padding:4pt 6pt;border:1px solid #ddd;border-radius:3pt;vertical-align:top}
+  .mc-val{font-size:12pt;font-weight:700}
+  .mc-lbl{font-size:8pt;color:#666}
+  /* ── Badges & tags ── */
+  .badge{border:1px solid #ccc!important;background:#f5f5f5!important;color:#333!important;padding:1pt 4pt;border-radius:2pt;font-size:8pt}
+  /* ── Bin visual: hide SVG diagrams to save space ── */
+  .bins,.led-diag,.bin-row{display:none!important}
+  /* ── Alerts ── */
+  .alert{border:1px solid #ccc!important;background:#f9f9f9!important;color:#333!important;padding:4pt 6pt;font-size:9pt}
+  /* ── Page break helpers ── */
+  .page-break-before{break-before:page}
+  .page-break-avoid{break-inside:avoid}
+  /* ── Footer ── */
+  @page{margin:15mm 12mm;size:A4 portrait}
+}
+/* Responsive */
+@media(max-width:860px){.g3{grid-template-columns:1fr 1fr}.g4,.g5{grid-template-columns:1fr 1fr}.sidebar{width:180px;min-width:180px}}
+@media(max-width:600px){.sidebar{display:none}.g2,.g3,.g4,.g5{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="layout">
+
+<!-- ══════════ SIDEBAR ══════════ -->
+<nav class="sidebar">
+  <div class="sb-brand">
+    <h1><i class="ti ti-layout-grid" style="color:var(--accent)"></i>SignERP v2</h1>
+    <p>Soft Signage Costing System</p>
+  </div>
+  <div class="nav-sec">Estimation</div>
+  <button class="nav-item active" data-page="estimator" onclick="showPage('estimator',this)"><i class="ti ti-calculator"></i>New Estimate</button>
+  <button class="nav-item" data-page="history" onclick="showPage('history',this)"><i class="ti ti-history"></i>History</button>
+  <div class="nav-sec">Masters</div>
+  <button class="nav-item" data-page="mp" onclick="showPage('mp',this)"><i class="ti ti-rectangle"></i>Profiles</button>
+  <button class="nav-item" data-page="mm" onclick="showPage('mm',this)"><i class="ti ti-bulb"></i>LED Modules</button>
+  <button class="nav-item" data-page="mb" onclick="showPage('mb',this)"><i class="ti ti-align-center"></i>LED Bars</button>
+  <button class="nav-item" data-page="md" onclick="showPage('md',this)"><i class="ti ti-plug"></i>Drivers</button>
+  <button class="nav-item" data-page="ms" onclick="showPage('ms',this)"><i class="ti ti-stack"></i>Sheet Materials</button>
+  <button class="nav-item" data-page="mpr" onclick="showPage('mpr',this)"><i class="ti ti-printer"></i>Printing Media</button>
+  <button class="nav-item" data-page="ma" onclick="showPage('ma',this)"><i class="ti ti-tool"></i>Accessories</button>
+  <div class="nav-sec">Reports</div>
+  <button class="nav-item" data-page="dashboard" onclick="showPage('dashboard',this)"><i class="ti ti-chart-bar"></i>Dashboard</button>
+  <button class="nav-item" data-page="costsheet" onclick="showPage('costsheet',this)"><i class="ti ti-file-invoice"></i>Cost Sheet</button>
+</nav>
+
+<!-- ══════════ MAIN ══════════ -->
+<div class="main">
+<div class="topbar">
+  <span class="topbar-title" id="topbar-title">New Estimate</span>
+  <div class="topbar-right">
+    <span id="est-badge" class="badge bg-blue" style="display:none"></span>
+    <button class="btn-secondary btn-sm no-print" onclick="resetEst()"><i class="ti ti-refresh"></i>Reset</button>
+    <button class="btn-success btn-sm no-print" onclick="generateCostSheet()"><i class="ti ti-file-invoice"></i>Generate Cost Sheet</button>
+  </div>
+</div>
+<div class="content">
+
+<!-- ══════════ ESTIMATOR ══════════ -->
+<div class="page active" id="page-estimator">
+<div class="steps">
+  <div class="step active" id="si1" onclick="jumpStep(1)"><div class="snum">1</div>Sign Type</div>
+  <div class="step" id="si2" onclick="jumpStep(2)"><div class="snum">2</div>Dimensions</div>
+  <div class="step" id="si3" onclick="jumpStep(3)"><div class="snum">3</div>Materials</div>
+  <div class="step" id="si4" onclick="jumpStep(4)"><div class="snum">4</div>LED Config</div>
+  <div class="step" id="si5" onclick="jumpStep(5)"><div class="snum">5</div>Printing</div>
+  <div class="step" id="si6" onclick="jumpStep(6)"><div class="snum">6</div>Pricing</div>
+</div>
+
+<!-- STEP 1 -->
+<div id="s1">
+<div class="card">
+  <div class="card-header"><div class="card-title"><i class="ti ti-selector"></i>Sign Type &amp; Job Reference</div></div>
+  <div class="g3">
+    <div class="fg"><label>Customer / Job Name</label><input id="s1job" placeholder="e.g. Levis Store — 2nd Floor"></div>
+    <div class="fg"><label>Sign Category *</label>
+      <select id="s1cat" onchange="onCatChange()">
+        <option value="">— select —</option>
+        <option value="nonlit">Non-Lit Sign (SEG frame only)</option>
+        <option value="seg-indoor">Backlit SEG Indoor</option>
+        <option value="backlit-outdoor">Backlit Outdoor (Non-SEG)</option>
+        <option value="outdoor-illum">Outdoor Illuminated Sign</option>
+      </select>
+    </div>
+    <div class="fg" id="wrapProfile" style="display:none"><label>Aluminium Profile *</label>
+      <select id="s1profile" onchange="onProfileChange()"><option value="">— select profile —</option></select>
+    </div>
+  </div>
+  <div class="fg" style="max-width:200px"><label>Quantity (signs)</label><input id="s1qty" type="number" value="1" min="1" oninput="calcAll()"></div>
+  <div id="s1info" class="alert a-info" style="display:none;margin-top:8px"><i class="ti ti-info-circle"></i><span id="s1infoTxt"></span></div>
+  <div style="display:flex;justify-content:flex-end;margin-top:14px">
+    <button class="btn-primary" onclick="goStep(2)">Next <i class="ti ti-arrow-right"></i></button>
+  </div>
+</div>
+</div>
+
+<!-- STEP 2 -->
+<div id="s2" style="display:none">
+<div class="card">
+  <div class="card-header"><div class="card-title"><i class="ti ti-ruler-measure"></i>Sign Dimensions</div></div>
+  <div class="g3">
+    <div class="fg"><label>Width *</label><input type="number" id="s2w" placeholder="e.g. 1200" min="1" oninput="calcAll()"></div>
+    <div class="fg"><label>Height *</label><input type="number" id="s2h" placeholder="e.g. 600" min="1" oninput="calcAll()"></div>
+    <div class="fg"><label>Unit</label>
+      <select id="s2unit" onchange="calcAll()">
+        <option value="mm">mm</option>
+        <option value="feet">feet</option>
+        <option value="inches">inches</option>
+      </select>
+    </div>
+  </div>
+  <div id="s2conv" class="alert a-info" style="display:none;margin-top:4px"><i class="ti ti-arrows-exchange"></i><span id="s2convTxt"></span></div>
+  <div class="g5" style="margin-top:12px">
+    <div class="mc blue"><div class="mc-lbl">Width mm</div><div class="mc-val" id="dmW">—</div></div>
+    <div class="mc blue"><div class="mc-lbl">Height mm</div><div class="mc-val" id="dmH">—</div></div>
+    <div class="mc"><div class="mc-lbl">Area sq.ft</div><div class="mc-val" id="dmA">—</div></div>
+    <div class="mc"><div class="mc-lbl">Area m²</div><div class="mc-val" id="dmM2">—</div></div>
+    <div class="mc"><div class="mc-lbl">Perimeter m</div><div class="mc-val" id="dmP">—</div></div>
+  </div>
+  <div style="display:flex;justify-content:space-between;margin-top:14px">
+    <button class="btn-secondary" onclick="goStep(1)"><i class="ti ti-arrow-left"></i>Back</button>
+    <button class="btn-primary" onclick="goStep(3)">Next <i class="ti ti-arrow-right"></i></button>
+  </div>
+</div>
+</div>
+
+<!-- STEP 3 -->
+<div id="s3" style="display:none">
+<div class="card">
+  <div class="card-header"><div class="card-title"><i class="ti ti-stack-2"></i>Profile, Materials &amp; Accessories</div></div>
+
+  <div class="sdiv">Profile Cut Optimisation (FFD Bin-Packing)</div>
+  <div id="s3prof"><div class="alert a-warn"><i class="ti ti-alert-circle"></i>Select a profile in Step 1.</div></div>
+
+  <div class="sdiv">Backing Sheet / Panel</div>
+  <div class="g3">
+    <div class="fg"><label>Sheet Material</label>
+      <select id="s3sheet" onchange="calcAll()"><option value="">— select —</option></select>
+    </div>
+    <div class="fg"><label>Wastage % override <span style="color:var(--text3)">(blank = master default)</span></label>
+      <input type="number" id="s3waste" placeholder="use master default" min="0" max="100" oninput="calcAll()">
+    </div>
+    <div class="fg"><label>Custom cost/sheet ₹ <span style="color:var(--text3)">(optional)</span></label>
+      <input type="number" id="s3sheetCost" placeholder="use master rate" oninput="calcAll()">
+    </div>
+  </div>
+  <div id="s3sheetRes"></div>
+
+  <div class="sdiv">Accessories &amp; Hardware</div>
+  <div id="s3acc"></div>
+  <div style="margin-top:8px">
+    <button class="btn-secondary btn-sm" onclick="addCustomAcc()"><i class="ti ti-plus"></i>Add Custom Item</button>
+  </div>
+
+  <div style="display:flex;justify-content:space-between;margin-top:14px">
+    <button class="btn-secondary" onclick="goStep(2)"><i class="ti ti-arrow-left"></i>Back</button>
+    <button class="btn-primary" onclick="goStep(4)">Next <i class="ti ti-arrow-right"></i></button>
+  </div>
+</div>
+</div>
+
+<!-- STEP 4 -->
+<div id="s4" style="display:none">
+<div class="card">
+  <div class="card-header"><div class="card-title"><i class="ti ti-bulb"></i>LED Configuration</div></div>
+  <div id="s4noled" class="alert a-info" style="display:none"><i class="ti ti-info-circle"></i>Non-Lit sign — no LED or driver required.</div>
+  <div id="s4ledArea">
+    <div class="tabs">
+      <button class="tab active" id="tab-mod" onclick="switchLedTab('module',this)">LED Modules</button>
+      <button class="tab" id="tab-bar" onclick="switchLedTab('bar',this)">LED Bars</button>
+    </div>
+    <!-- Modules -->
+    <div class="tab-pane active" id="tp-module">
+      <div class="g3">
+        <div class="fg"><label>Module Type</label>
+          <select id="s4modType" onchange="onLedModChange()"><option value="">— select —</option></select>
+        </div>
+        <div class="fg"><label>Edge Margin (mm)</label><input type="number" id="s4modMargin" value="30" oninput="calcAll()"></div>
+        <div class="fg"><label>Horizontal Gap mm <span style="color:var(--text3)">(0 = use master default)</span></label>
+          <input type="number" id="s4modHGap" value="0" min="0" oninput="calcAll()">
+        </div>
+      </div>
+      <div class="g3">
+        <div class="fg"><label>Vertical Gap mm <span style="color:var(--text3)">(0 = use master default)</span></label>
+          <input type="number" id="s4modVGap" value="0" min="0" oninput="calcAll()">
+        </div>
+        <div class="fg"><label>IP Rating</label>
+          <select id="s4modIP"><option value="IP20">IP20 Indoor</option><option value="IP65">IP65 Outdoor</option><option value="IP67">IP67 Submersible</option></select>
+        </div>
+        <div class="fg"><label>Custom cost/module ₹ <span style="color:var(--text3)">(optional)</span></label>
+          <input type="number" id="s4modCost" placeholder="use master rate" oninput="calcAll()">
+        </div>
+      </div>
+      <div id="s4modRes"></div>
+    </div>
+    <!-- Bars -->
+    <div class="tab-pane" id="tp-bar">
+      <div class="alert a-info"><i class="ti ti-info-circle"></i><strong>LED Bars are ALWAYS placed VERTICALLY</strong> (top-to-bottom, parallel to sign height). The number of bars is calculated from sign WIDTH with horizontal spacing.</div>
+      <div class="g3">
+        <div class="fg"><label>LED Bar Type</label>
+          <select id="s4barType" onchange="onLedBarChange()"><option value="">— select —</option></select>
+        </div>
+        <div class="fg"><label>Gap Between Bars (mm)</label><input type="number" id="s4barGap" value="100" min="0" oninput="calcAll()"></div>
+        <div class="fg"><label>Edge Margin (mm)</label><input type="number" id="s4barMargin" value="50" oninput="calcAll()"></div>
+      </div>
+      <div class="g3">
+        <div class="fg"><label>IP Rating</label>
+          <select id="s4barIP"><option value="IP65">IP65 Outdoor</option><option value="IP67">IP67 Submersible</option><option value="IP20">IP20 Indoor</option></select>
+        </div>
+        <div class="fg"><label>Custom cost/bar piece ₹ <span style="color:var(--text3)">(optional)</span></label>
+          <input type="number" id="s4barCost" placeholder="use master rate" oninput="calcAll()">
+        </div>
+      </div>
+      <div id="s4barRes"></div>
+    </div>
+
+    <div class="sdiv">Driver Optimisation</div>
+    <div class="g3" style="margin-bottom:12px">
+      <div class="fg"><label>Safety Buffer %</label>
+        <select id="s4safety" onchange="calcAll()">
+          <option value="20">20% (indoor standard)</option>
+          <option value="25" selected>25% (recommended)</option>
+          <option value="30">30% (outdoor / harsh env.)</option>
+        </select>
+      </div>
+      <div class="fg"><label>Max Driver Loading %</label>
+        <select id="s4maxload" onchange="calcAll()">
+          <option value="70">70% (conservative)</option>
+          <option value="80" selected>80% (standard)</option>
+          <option value="90">90% (budget)</option>
+        </select>
+      </div>
+    </div>
+    <div id="s4drvRes"></div>
+  </div>
+  <div style="display:flex;justify-content:space-between;margin-top:14px">
+    <button class="btn-secondary" onclick="goStep(3)"><i class="ti ti-arrow-left"></i>Back</button>
+    <button class="btn-primary" onclick="goStep(5)">Next <i class="ti ti-arrow-right"></i></button>
+  </div>
+</div>
+</div>
+
+<!-- STEP 5 -->
+<div id="s5" style="display:none">
+<div class="card">
+  <div class="card-header"><div class="card-title"><i class="ti ti-printer"></i>Graphic Printing &amp; Finishing</div></div>
+  <div class="g3">
+    <div class="fg"><label>Print Media</label>
+      <select id="s5media" onchange="calcAll()"><option value="">— select —</option></select>
+    </div>
+    <div class="fg"><label>Print Type</label>
+      <select id="s5ptype" onchange="calcAll()">
+        <option value="dye-sub">Dye Sublimation</option>
+        <option value="uv">Digital UV</option>
+        <option value="solvent">Eco-Solvent</option>
+        <option value="latex">Latex</option>
+      </select>
+    </div>
+    <div class="fg"><label>Custom cost/sq.ft ₹ <span style="color:var(--text3)">(optional)</span></label>
+      <input type="number" id="s5printCost" placeholder="use media rate" oninput="calcAll()">
+    </div>
+  </div>
+  <div class="g3">
+    <div class="fg"><label>Bleed / Overhang (mm)</label><input type="number" id="s5bleed" value="30" oninput="calcAll()"></div>
+    <div class="fg"><label>Print Wastage % <span style="color:var(--text3)">(0 = media default)</span></label>
+      <input type="number" id="s5waste" value="0" min="0" oninput="calcAll()">
+    </div>
+  </div>
+  <div class="sdiv">Finishing Options</div>
+  <div class="g3" style="row-gap:6px">
+    <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:12px;font-weight:400;color:var(--text)"><input type="checkbox" id="finSeg" onchange="calcAll()" checked>SEG Silicone Edge</label>
+    <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:12px;font-weight:400;color:var(--text)"><input type="checkbox" id="finHem" onchange="calcAll()">Hemming / Heat-seal</label>
+    <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:12px;font-weight:400;color:var(--text)"><input type="checkbox" id="finEye" onchange="calcAll()">Eyelets</label>
+    <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:12px;font-weight:400;color:var(--text)"><input type="checkbox" id="finWeld" onchange="calcAll()">Welding</label>
+    <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:12px;font-weight:400;color:var(--text)"><input type="checkbox" id="finStitch" onchange="calcAll()">Stitching</label>
+  </div>
+  <div class="g3" style="margin-top:10px">
+    <div class="fg"><label>SEG silicone border (₹/m)</label><input type="number" id="segRate" value="35" oninput="calcAll()"></div>
+    <div class="fg"><label>Hemming flat rate (₹)</label><input type="number" id="hemRate" value="120" oninput="calcAll()"></div>
+    <div class="fg"><label>Eyelets / Weld / Stitch (₹ flat)</label><input type="number" id="finRate" value="80" oninput="calcAll()"></div>
+  </div>
+  <div id="s5res" style="margin-top:10px"></div>
+  <div style="display:flex;justify-content:space-between;margin-top:14px">
+    <button class="btn-secondary" onclick="goStep(4)"><i class="ti ti-arrow-left"></i>Back</button>
+    <button class="btn-primary" onclick="goStep(6)">Next <i class="ti ti-arrow-right"></i></button>
+  </div>
+</div>
+</div>
+
+<!-- STEP 6 -->
+<div id="s6" style="display:none">
+<div class="card">
+  <div class="card-header"><div class="card-title"><i class="ti ti-currency-rupee"></i>Pricing &amp; Margins</div></div>
+  <div class="g3">
+    <div class="fg"><label>Labour Cost (₹)</label><input type="number" id="s6labour" value="500" oninput="calcAll()"></div>
+    <div class="fg"><label>Installation / Transport (₹)</label><input type="number" id="s6install" value="300" oninput="calcAll()"></div>
+    <div class="fg"><label>Overhead / Indirect (%)</label><input type="number" id="s6overhead" value="10" min="0" oninput="calcAll()"></div>
+  </div>
+  <div class="g3">
+    <div class="fg"><label>Markup (%)</label><input type="number" id="s6markup" value="100" min="0" oninput="calcAll()"></div>
+    <div class="fg"><label>Discount (%)</label><input type="number" id="s6discount" value="0" min="0" oninput="calcAll()"></div>
+    <div class="fg"><label>GST (%)</label><input type="number" id="s6gst" value="18" min="0" oninput="calcAll()"></div>
+  </div>
+  <div class="sdiv">Pricing Summary</div>
+  <div id="s6sum"></div>
+  <div class="g4" style="margin-top:12px">
+    <div class="mc"><div class="mc-lbl">Raw Material</div><div class="mc-val" id="pcMat">₹0</div></div>
+    <div class="mc blue"><div class="mc-lbl">Sell Price (ex-GST)</div><div class="mc-val" id="pcSell">₹0</div></div>
+    <div class="mc green"><div class="mc-lbl">Gross Margin</div><div class="mc-val" id="pcMargin">0%</div></div>
+    <div class="mc orange"><div class="mc-lbl">Final incl. GST</div><div class="mc-val" id="pcFinal">₹0</div></div>
+  </div>
+  <div style="display:flex;justify-content:space-between;margin-top:14px">
+    <button class="btn-secondary" onclick="goStep(5)"><i class="ti ti-arrow-left"></i>Back</button>
+    <button class="btn-success" onclick="generateCostSheet()"><i class="ti ti-file-invoice"></i>Generate Cost Sheet</button>
+  </div>
+</div>
+</div>
+</div><!-- end estimator page -->
+
+<!-- ══════════ COST SHEET ══════════ -->
+<div class="page" id="page-costsheet">
+<div class="card">
+  <div class="card-header">
+    <div class="card-title"><i class="ti ti-file-invoice"></i>Cost Sheet &amp; BOQ</div>
+    <div style="display:flex;gap:8px" class="no-print">
+      <button class="btn-secondary btn-sm" onclick="printCostSheet()"><i class="ti ti-printer"></i>Print / PDF</button>
+      <button class="btn-primary btn-sm" onclick="exportCSV()"><i class="ti ti-download"></i>Export CSV</button>
+    </div>
+  </div>
+  <div id="csContent"><div class="alert a-info"><i class="ti ti-info-circle"></i>Complete the estimator and click "Generate Cost Sheet".</div></div>
+</div>
+</div>
+
+<!-- ══════════ DASHBOARD ══════════ -->
+<div class="page" id="page-dashboard">
+<div class="g4" style="margin-bottom:14px">
+  <div class="mc blue"><div class="mc-lbl">Material Cost</div><div class="mc-val" id="dbMat">₹0</div></div>
+  <div class="mc orange"><div class="mc-lbl">Wastage Cost</div><div class="mc-val" id="dbWaste">₹0</div></div>
+  <div class="mc green"><div class="mc-lbl">Gross Margin</div><div class="mc-val" id="dbMargin">0%</div></div>
+  <div class="mc purple"><div class="mc-lbl">Selling Value</div><div class="mc-val" id="dbSell">₹0</div></div>
+</div>
+<div class="card">
+  <div class="card-header"><div class="card-title"><i class="ti ti-chart-bar"></i>Cost Breakdown</div></div>
+  <div id="dbBreak"><p style="color:var(--text3);font-size:12px">Run an estimate first.</p></div>
+</div>
+</div>
+
+<!-- ══════════ HISTORY ══════════ -->
+<div class="page" id="page-history">
+<div class="card">
+  <div class="card-header">
+    <div class="card-title"><i class="ti ti-history"></i>Estimation History</div>
+    <button class="btn-danger btn-sm" onclick="clearHist()"><i class="ti ti-trash"></i>Clear All</button>
+  </div>
+  <div id="histContent"><p style="color:var(--text3);font-size:12px;padding:8px">No saved estimates.</p></div>
+</div>
+</div>
+
+<!-- ══════════ MASTER PAGES ══════════ -->
+<div class="page" id="page-mp">
+<div class="card">
+  <div class="card-header"><div class="card-title"><i class="ti ti-rectangle"></i>Aluminium Profiles Master</div>
+    <button class="btn-primary btn-sm" onclick="openMod('mod-profile','')"><i class="ti ti-plus"></i>Add Profile</button></div>
+  <div class="alert a-info" style="margin-bottom:10px"><i class="ti ti-info-circle"></i>Stock length in mm. Cost is per full stock length. Profile cuts are optimised with FFD bin-packing — only actual stock bars consumed are charged.</div>
+  <div style="overflow-x:auto"><table class="tbl"><thead><tr><th>Profile Name</th><th>W mm</th><th>D mm</th><th>Stock Length</th><th>Category</th><th>SKU</th><th>Supplier</th><th class="num">₹/length</th><th>Status</th><th></th></tr></thead><tbody id="tbProfiles"></tbody></table></div>
+</div>
+</div>
+
+<div class="page" id="page-mm">
+<div class="card">
+  <div class="card-header"><div class="card-title"><i class="ti ti-bulb"></i>LED Modules Master</div>
+    <button class="btn-primary btn-sm" onclick="openMod('mod-lm','')"><i class="ti ti-plus"></i>Add Module</button></div>
+  <div style="overflow-x:auto"><table class="tbl"><thead><tr><th>Name</th><th>W×H mm</th><th>Gap H/V mm</th><th>Wattage</th><th>IP</th><th>Usage</th><th>SKU</th><th class="num">₹/module</th><th>Status</th><th></th></tr></thead><tbody id="tbLedMod"></tbody></table></div>
+</div>
+</div>
+
+<div class="page" id="page-mb">
+<div class="card">
+  <div class="card-header"><div class="card-title"><i class="ti ti-align-center"></i>LED Bars Master</div>
+    <button class="btn-primary btn-sm" onclick="openMod('mod-lb','')"><i class="ti ti-plus"></i>Add Bar</button></div>
+  <div class="alert a-info" style="margin-bottom:10px"><i class="ti ti-info-circle"></i>Bars are <strong>always installed vertically</strong> (top-to-bottom). Bar length = one stock piece. Multiple pieces are stacked per column when sign height exceeds bar length.</div>
+  <div style="overflow-x:auto"><table class="tbl"><thead><tr><th>Name</th><th>Length mm</th><th>Width mm</th><th>W/bar</th><th>IP</th><th>Usage</th><th>SKU</th><th class="num">₹/bar</th><th>Status</th><th></th></tr></thead><tbody id="tbLedBar"></tbody></table></div>
+</div>
+</div>
+
+<div class="page" id="page-md">
+<div class="card">
+  <div class="card-header"><div class="card-title"><i class="ti ti-plug"></i>LED Drivers Master</div>
+    <button class="btn-primary btn-sm" onclick="openMod('mod-drv','')"><i class="ti ti-plus"></i>Add Driver</button></div>
+  <div style="overflow-x:auto"><table class="tbl"><thead><tr><th>Wattage</th><th>Brand / Model</th><th>Voltage</th><th>SKU</th><th>Supplier</th><th class="num">₹/unit</th><th>Status</th><th></th></tr></thead><tbody id="tbDrv"></tbody></table></div>
+</div>
+</div>
+
+<div class="page" id="page-ms">
+<div class="card">
+  <div class="card-header"><div class="card-title"><i class="ti ti-stack"></i>Sheet Materials Master</div>
+    <button class="btn-primary btn-sm" onclick="openMod('mod-sheet','')"><i class="ti ti-plus"></i>Add Material</button></div>
+  <div class="alert a-info" style="margin-bottom:10px"><i class="ti ti-info-circle"></i>Cost is charged by <strong>actual area consumed</strong>, not full sheet. Formula: Chargeable = Actual Area × (1 + Wastage%)</div>
+  <div style="overflow-x:auto"><table class="tbl"><thead><tr><th>Material</th><th>Sheet Size mm</th><th>Thickness</th><th>Wastage %</th><th>SKU</th><th>Supplier</th><th class="num">₹/sheet</th><th class="num">₹/sq.ft</th><th>Status</th><th></th></tr></thead><tbody id="tbSheets"></tbody></table></div>
+</div>
+</div>
+
+<div class="page" id="page-mpr">
+<div class="card">
+  <div class="card-header"><div class="card-title"><i class="ti ti-printer"></i>Printing Media Master</div>
+    <button class="btn-primary btn-sm" onclick="openMod('mod-print','')"><i class="ti ti-plus"></i>Add Media</button></div>
+  <div style="overflow-x:auto"><table class="tbl"><thead><tr><th>Media Name</th><th>Print Types</th><th>Wastage %</th><th>SKU</th><th>Supplier</th><th class="num">₹/sq.ft</th><th>Status</th><th></th></tr></thead><tbody id="tbPrint"></tbody></table></div>
+</div>
+</div>
+
+<div class="page" id="page-ma">
+<div class="card">
+  <div class="card-header"><div class="card-title"><i class="ti ti-tool"></i>Accessories Master</div>
+    <button class="btn-primary btn-sm" onclick="openMod('mod-acc','')"><i class="ti ti-plus"></i>Add Accessory</button></div>
+  <div style="overflow-x:auto"><table class="tbl"><thead><tr><th>Item Name</th><th>Unit</th><th>Mode</th><th>SKU</th><th>Supplier</th><th class="num">₹/unit</th><th>Status</th><th></th></tr></thead><tbody id="tbAcc"></tbody></table></div>
+</div>
+</div>
+
+</div><!-- content -->
+</div><!-- main -->
+</div><!-- layout -->
+
+<!-- ══════════ MODALS ══════════ -->
+
+<!-- Profile -->
+<div class="overlay" id="mod-profile">
+<div class="modal">
+  <div class="modal-hdr"><div class="modal-title" id="mhProfile">Add Profile</div><button class="btn-ghost" onclick="closeMod('mod-profile')"><i class="ti ti-x"></i></button></div>
+  <input type="hidden" id="mpId">
+  <div class="g2">
+    <div class="fg"><label>Profile Name *</label><input id="mpName" placeholder="e.g. 50mm SEG Indoor"></div>
+    <div class="fg"><label>Category *</label>
+      <select id="mpCat"><option value="nonlit">Non-Lit</option><option value="seg-indoor">SEG Indoor</option><option value="seg-outdoor">SEG Outdoor</option></select>
+    </div>
+    <div class="fg"><label>Profile Width (mm)</label><input id="mpWidth" type="number" value="50"></div>
+    <div class="fg"><label>Profile Depth (mm)</label><input id="mpDepth" type="number" value="40"></div>
+    <div class="fg"><label>Stock Length (mm) *</label><input id="mpStock" type="number" value="4000"></div>
+    <div class="fg"><label>Usage</label><select id="mpUsage"><option>Indoor</option><option>Outdoor</option><option>Both</option></select></div>
+    <div class="fg"><label>Cost per length (₹) *</label><input id="mpCost" type="number" value="350"></div>
+    <div class="fg"><label>SKU</label><input id="mpSku" placeholder="ALU-50-SEG"></div>
+    <div class="fg"><label>Supplier</label><input id="mpSupp" placeholder="Alumex"></div>
+    <div class="fg"><label>Status</label><select id="mpActive"><option value="true">Active</option><option value="false">Disabled</option></select></div>
+  </div>
+  <div style="display:flex;justify-content:flex-end;gap:8px;margin-top:16px">
+    <button class="btn-secondary" onclick="closeMod('mod-profile')">Cancel</button>
+    <button class="btn-primary" onclick="saveProfile()">Save Profile</button>
+  </div>
+</div>
+</div>
+
+<!-- LED Module -->
+<div class="overlay" id="mod-lm">
+<div class="modal">
+  <div class="modal-hdr"><div class="modal-title" id="mhLm">Add LED Module</div><button class="btn-ghost" onclick="closeMod('mod-lm')"><i class="ti ti-x"></i></button></div>
+  <input type="hidden" id="lmId">
+  <div class="g2">
+    <div class="fg"><label>Module Name *</label><input id="lmName" placeholder="e.g. 3-Module SMD 5630"></div>
+    <div class="fg"><label>Usage</label><select id="lmUsage"><option>Indoor</option><option>Outdoor</option><option>Both</option></select></div>
+    <div class="fg"><label>Module Width (mm)</label><input id="lmW" type="number" value="36"></div>
+    <div class="fg"><label>Module Height (mm)</label><input id="lmH" type="number" value="13"></div>
+    <div class="fg"><label>Default H-Gap (mm)</label><input id="lmHGap" type="number" value="50"></div>
+    <div class="fg"><label>Default V-Gap (mm)</label><input id="lmVGap" type="number" value="50"></div>
+    <div class="fg"><label>Wattage/module (W)</label><input id="lmWatt" type="number" value="0.72" step="0.01"></div>
+    <div class="fg"><label>IP Rating</label><select id="lmIP"><option>IP20</option><option>IP54</option><option>IP65</option><option>IP67</option></select></div>
+    <div class="fg"><label>Cost/module (₹) *</label><input id="lmCost" type="number" value="8"></div>
+    <div class="fg"><label>SKU</label><input id="lmSku" placeholder="LED-MOD-3"></div>
+    <div class="fg"><label>Supplier</label><input id="lmSupp" placeholder="Generic"></div>
+    <div class="fg"><label>Status</label><select id="lmActive"><option value="true">Active</option><option value="false">Disabled</option></select></div>
+  </div>
+  <div style="display:flex;justify-content:flex-end;gap:8px;margin-top:16px">
+    <button class="btn-secondary" onclick="closeMod('mod-lm')">Cancel</button>
+    <button class="btn-primary" onclick="saveLedMod()">Save</button>
+  </div>
+</div>
+</div>
+
+<!-- LED Bar -->
+<div class="overlay" id="mod-lb">
+<div class="modal">
+  <div class="modal-hdr"><div class="modal-title" id="mhLb">Add LED Bar</div><button class="btn-ghost" onclick="closeMod('mod-lb')"><i class="ti ti-x"></i></button></div>
+  <input type="hidden" id="lbId">
+  <div class="g2">
+    <div class="fg"><label>Bar Name *</label><input id="lbName" placeholder="e.g. LED Bar 1200mm IP65"></div>
+    <div class="fg"><label>Usage</label><select id="lbUsage"><option>Indoor</option><option>Outdoor</option><option>Both</option></select></div>
+    <div class="fg"><label>Bar Length (mm) *</label><input id="lbLen" type="number" value="1200"></div>
+    <div class="fg"><label>Bar Width (mm)</label><input id="lbWidth" type="number" value="15"></div>
+    <div class="fg"><label>Wattage/bar piece (W)</label><input id="lbWatt" type="number" value="10" step="0.1"></div>
+    <div class="fg"><label>IP Rating</label><select id="lbIP"><option>IP65</option><option>IP67</option><option>IP20</option></select></div>
+    <div class="fg"><label>Cost/bar piece (₹) *</label><input id="lbCost" type="number" value="200"></div>
+    <div class="fg"><label>SKU</label><input id="lbSku" placeholder="LED-BAR-1200"></div>
+    <div class="fg"><label>Supplier</label><input id="lbSupp" placeholder="Generic"></div>
+    <div class="fg"><label>Status</label><select id="lbActive"><option value="true">Active</option><option value="false">Disabled</option></select></div>
+  </div>
+  <div style="display:flex;justify-content:flex-end;gap:8px;margin-top:16px">
+    <button class="btn-secondary" onclick="closeMod('mod-lb')">Cancel</button>
+    <button class="btn-primary" onclick="saveLedBar()">Save</button>
+  </div>
+</div>
+</div>
+
+<!-- Driver -->
+<div class="overlay" id="mod-drv">
+<div class="modal">
+  <div class="modal-hdr"><div class="modal-title" id="mhDrv">Add Driver</div><button class="btn-ghost" onclick="closeMod('mod-drv')"><i class="ti ti-x"></i></button></div>
+  <input type="hidden" id="drvId">
+  <div class="g2">
+    <div class="fg"><label>Wattage (W) *</label><input id="drvWatt" type="number" value="100"></div>
+    <div class="fg"><label>Brand / Model</label><input id="drvBrand" placeholder="Meanwell LRS-100-24"></div>
+    <div class="fg"><label>Output Voltage (V)</label><input id="drvVolt" type="number" value="24"></div>
+    <div class="fg"><label>Cost (₹) *</label><input id="drvCost" type="number" value="520"></div>
+    <div class="fg"><label>SKU</label><input id="drvSku" placeholder="MW-100W"></div>
+    <div class="fg"><label>Supplier</label><input id="drvSupp" placeholder="Meanwell India"></div>
+    <div class="fg"><label>Status</label><select id="drvActive"><option value="true">Active</option><option value="false">Disabled</option></select></div>
+  </div>
+  <div style="display:flex;justify-content:flex-end;gap:8px;margin-top:16px">
+    <button class="btn-secondary" onclick="closeMod('mod-drv')">Cancel</button>
+    <button class="btn-primary" onclick="saveDrv()">Save</button>
+  </div>
+</div>
+</div>
+
+<!-- Sheet -->
+<div class="overlay" id="mod-sheet">
+<div class="modal">
+  <div class="modal-hdr"><div class="modal-title" id="mhSheet">Add Sheet Material</div><button class="btn-ghost" onclick="closeMod('mod-sheet')"><i class="ti ti-x"></i></button></div>
+  <input type="hidden" id="shId">
+  <div class="g2">
+    <div class="fg"><label>Material Name *</label><input id="shName" placeholder="e.g. Acrylic Clear 3mm"></div>
+    <div class="fg"><label>Thickness (mm)</label><input id="shThick" type="number" value="3"></div>
+    <div class="fg"><label>Sheet Width (mm)</label><input id="shW" type="number" value="1220"></div>
+    <div class="fg"><label>Sheet Height (mm)</label><input id="shH" type="number" value="2440"></div>
+    <div class="fg"><label>Wastage % (default)</label><input id="shWaste" type="number" value="15" min="0" max="100"></div>
+    <div class="fg"><label>Cost per sheet (₹) *</label><input id="shCost" type="number" value="950"></div>
+    <div class="fg"><label>SKU</label><input id="shSku" placeholder="ACR-3MM"></div>
+    <div class="fg"><label>Supplier</label><input id="shSupp" placeholder="Generic"></div>
+    <div class="fg"><label>Status</label><select id="shActive"><option value="true">Active</option><option value="false">Disabled</option></select></div>
+  </div>
+  <div style="display:flex;justify-content:flex-end;gap:8px;margin-top:16px">
+    <button class="btn-secondary" onclick="closeMod('mod-sheet')">Cancel</button>
+    <button class="btn-primary" onclick="saveSheet()">Save</button>
+  </div>
+</div>
+</div>
+
+<!-- Print Media -->
+<div class="overlay" id="mod-print">
+<div class="modal">
+  <div class="modal-hdr"><div class="modal-title" id="mhPrint">Add Print Media</div><button class="btn-ghost" onclick="closeMod('mod-print')"><i class="ti ti-x"></i></button></div>
+  <input type="hidden" id="prId">
+  <div class="g2">
+    <div class="fg"><label>Media Name *</label><input id="prName" placeholder="e.g. SEG Silicone Edge Fabric"></div>
+    <div class="fg"><label>Wastage %</label><input id="prWaste" type="number" value="8" min="0" max="100"></div>
+    <div class="fg"><label>Compatible Print Types</label><input id="prTypes" placeholder="dye-sub, uv, solvent"></div>
+    <div class="fg"><label>Cost per sq.ft (₹) *</label><input id="prCost" type="number" value="45"></div>
+    <div class="fg"><label>SKU</label><input id="prSku" placeholder="FAB-SEG"></div>
+    <div class="fg"><label>Supplier</label><input id="prSupp" placeholder="Generic"></div>
+    <div class="fg"><label>Status</label><select id="prActive"><option value="true">Active</option><option value="false">Disabled</option></select></div>
+  </div>
+  <div style="display:flex;justify-content:flex-end;gap:8px;margin-top:16px">
+    <button class="btn-secondary" onclick="closeMod('mod-print')">Cancel</button>
+    <button class="btn-primary" onclick="savePrint()">Save</button>
+  </div>
+</div>
+</div>
+
+<!-- Accessory -->
+<div class="overlay" id="mod-acc">
+<div class="modal">
+  <div class="modal-hdr"><div class="modal-title" id="mhAcc">Add Accessory</div><button class="btn-ghost" onclick="closeMod('mod-acc')"><i class="ti ti-x"></i></button></div>
+  <input type="hidden" id="acId">
+  <div class="g2">
+    <div class="fg"><label>Item Name *</label><input id="acName" placeholder="e.g. Corner Joiner"></div>
+    <div class="fg"><label>Unit</label><input id="acUnit" value="pcs" placeholder="pcs"></div>
+    <div class="fg"><label>Mode</label><select id="acMand"><option value="false">Optional</option><option value="true">Mandatory</option></select></div>
+    <div class="fg"><label>Unit Cost (₹) *</label><input id="acCost" type="number" value="25"></div>
+    <div class="fg"><label>SKU</label><input id="acSku" placeholder="CJ-01"></div>
+    <div class="fg"><label>Supplier</label><input id="acSupp" placeholder="Generic"></div>
+    <div class="fg"><label>Status</label><select id="acActive"><option value="true">Active</option><option value="false">Disabled</option></select></div>
+  </div>
+  <div style="display:flex;justify-content:flex-end;gap:8px;margin-top:16px">
+    <button class="btn-secondary" onclick="closeMod('mod-acc')">Cancel</button>
+    <button class="btn-primary" onclick="saveAcc()">Save</button>
+  </div>
+</div>
+</div>
+
+<!-- Confirm Delete -->
+<div class="overlay" id="mod-confirm">
+<div class="modal" style="max-width:400px">
+  <div class="modal-hdr"><div class="modal-title">Confirm Delete</div><button class="btn-ghost" onclick="closeMod('mod-confirm')"><i class="ti ti-x"></i></button></div>
+  <p id="confirmMsg" style="font-size:13px;color:var(--text2);margin-bottom:16px"></p>
+  <div style="display:flex;justify-content:flex-end;gap:8px">
+    <button class="btn-secondary" onclick="closeMod('mod-confirm')">Cancel</button>
+    <button class="btn-danger" id="confirmOK">Delete</button>
+  </div>
+</div>
+</div>
+
+<script>
+
+// ═══════════════════════════════════════════════════════════
+//  DATABASE LAYER  —  localStorage with JSON serialisation
+//  All master data persists permanently across sessions.
+// ═══════════════════════════════════════════════════════════
+const DB = {
+  get(key, def = null) {
+    try { const v = localStorage.getItem(key); return v ? JSON.parse(v) : def; }
+    catch { return def; }
+  },
+  set(key, data) {
+    try { localStorage.setItem(key, JSON.stringify(data)); }
+    catch (e) { console.warn('DB write failed', e); }
+  }
+};
+
+const KEYS = {
+  profiles:   'SERP_profiles',
+  ledMods:    'SERP_led_mods',
+  ledBars:    'SERP_led_bars',
+  drivers:    'SERP_drivers',
+  sheets:     'SERP_sheets',
+  printing:   'SERP_printing',
+  accMaster:  'SERP_acc_master',
+  history:    'SERP_history'
+};
+
+// ═══════════════════════════════════════════════════════════
+//  DEFAULT MASTER DATA  —  seeded on first run
+// ═══════════════════════════════════════════════════════════
+const DEFAULTS = {
+  profiles: [
+    {id:'p1',name:'15mm Non-Lit Indoor',   width:15, depth:12, stockLen:4000,cost:180, usage:'Indoor', category:'nonlit',     sku:'ALU-15-NL',  supplier:'Alumex', active:true,updatedAt:''},
+    {id:'p2',name:'23mm Non-Lit Indoor',   width:23, depth:18, stockLen:4000,cost:220, usage:'Indoor', category:'nonlit',     sku:'ALU-23-NL',  supplier:'Alumex', active:true,updatedAt:''},
+    {id:'p3',name:'50mm SEG Indoor',       width:50, depth:40, stockLen:4000,cost:350, usage:'Indoor', category:'seg-indoor', sku:'ALU-50-SEG', supplier:'Alumex', active:true,updatedAt:''},
+    {id:'p4',name:'63mm SEG Indoor',       width:63, depth:50, stockLen:4000,cost:420, usage:'Indoor', category:'seg-indoor', sku:'ALU-63-SEG', supplier:'Alumex', active:true,updatedAt:''},
+    {id:'p5',name:'70mm SEG Indoor',       width:70, depth:55, stockLen:5000,cost:480, usage:'Indoor', category:'seg-indoor', sku:'ALU-70-SEG', supplier:'Alumex', active:true,updatedAt:''},
+    {id:'p6',name:'80mm SEG Indoor',       width:80, depth:60, stockLen:5000,cost:550, usage:'Indoor', category:'seg-indoor', sku:'ALU-80-SEG', supplier:'Alumex', active:true,updatedAt:''},
+    {id:'p7',name:'100mm SEG Indoor',      width:100,depth:80, stockLen:6000,cost:680, usage:'Indoor', category:'seg-indoor', sku:'ALU-100-SEG',supplier:'Alumex', active:true,updatedAt:''},
+    {id:'p8',name:'130mm Outdoor SEG',     width:130,depth:100,stockLen:5000,cost:980, usage:'Outdoor',category:'seg-outdoor',sku:'ALU-130-OUT',supplier:'Alumex', active:true,updatedAt:''},
+    {id:'p9',name:'150mm Outdoor SEG',     width:150,depth:120,stockLen:6000,cost:1250,usage:'Outdoor',category:'seg-outdoor',sku:'ALU-150-OUT',supplier:'Alumex', active:true,updatedAt:''},
+  ],
+  ledMods: [
+    {id:'lm1',name:'2-Module SMD 3528',  modW:36,modH:8, hGap:50,vGap:50,watt:0.48,ip:'IP20',usage:'Indoor', cost:6, sku:'LED-MOD-2',  supplier:'Generic', active:true,updatedAt:''},
+    {id:'lm2',name:'3-Module SMD 5630',  modW:36,modH:13,hGap:50,vGap:50,watt:0.72,ip:'IP20',usage:'Indoor', cost:8, sku:'LED-MOD-3',  supplier:'Generic', active:true,updatedAt:''},
+    {id:'lm3',name:'5-Module SMD 5050',  modW:60,modH:15,hGap:60,vGap:60,watt:1.44,ip:'IP65',usage:'Outdoor',cost:14,sku:'LED-MOD-5',  supplier:'Generic', active:true,updatedAt:''},
+    {id:'lm4',name:'LGP Edge Module 14mm',modW:14,modH:14,hGap:20,vGap:20,watt:0.3,ip:'IP20',usage:'Indoor', cost:12,sku:'LED-LGP-14',supplier:'LGP Tech',active:true,updatedAt:''},
+  ],
+  ledBars: [
+    {id:'lb1',name:'LED Bar 600mm IP65', barLen:600, barWidth:15,watt:5.0, ip:'IP65',usage:'Both',   cost:120,sku:'LED-BAR-600', supplier:'Generic',active:true,updatedAt:''},
+    {id:'lb2',name:'LED Bar 900mm IP65', barLen:900, barWidth:15,watt:7.5, ip:'IP65',usage:'Both',   cost:160,sku:'LED-BAR-900', supplier:'Generic',active:true,updatedAt:''},
+    {id:'lb3',name:'LED Bar 1200mm IP65',barLen:1200,barWidth:15,watt:10.0,ip:'IP65',usage:'Both',   cost:200,sku:'LED-BAR-1200',supplier:'Generic',active:true,updatedAt:''},
+    {id:'lb4',name:'LED Bar 1800mm IP65',barLen:1800,barWidth:15,watt:15.0,ip:'IP65',usage:'Outdoor',cost:280,sku:'LED-BAR-1800',supplier:'Generic',active:true,updatedAt:''},
+  ],
+  drivers: [
+    {id:'dr1',watt:40, brand:'Meanwell LPV-40-24', volt:24,cost:280, sku:'MW-40W', supplier:'Meanwell',active:true,updatedAt:''},
+    {id:'dr2',watt:60, brand:'Meanwell LRS-60-24', volt:24,cost:350, sku:'MW-60W', supplier:'Meanwell',active:true,updatedAt:''},
+    {id:'dr3',watt:100,brand:'Meanwell LRS-100-24',volt:24,cost:520, sku:'MW-100W',supplier:'Meanwell',active:true,updatedAt:''},
+    {id:'dr4',watt:150,brand:'Meanwell LRS-150-24',volt:24,cost:680, sku:'MW-150W',supplier:'Meanwell',active:true,updatedAt:''},
+    {id:'dr5',watt:200,brand:'Meanwell LRS-200-24',volt:24,cost:880, sku:'MW-200W',supplier:'Meanwell',active:true,updatedAt:''},
+    {id:'dr6',watt:250,brand:'Meanwell LRS-250-24',volt:24,cost:1050,sku:'MW-250W',supplier:'Meanwell',active:true,updatedAt:''},
+    {id:'dr7',watt:400,brand:'Meanwell RSP-400-24',volt:24,cost:1580,sku:'MW-400W',supplier:'Meanwell',active:true,updatedAt:''},
+  ],
+  sheets: [
+    {id:'sh1',name:'Acrylic Clear 3mm',      width:1220,height:2440,thickness:3,costPerSheet:950, wastage:15,sku:'ACR-3MM',  supplier:'Generic', active:true,updatedAt:''},
+    {id:'sh2',name:'Acrylic White 3mm',      width:1220,height:2440,thickness:3,costPerSheet:1050,wastage:15,sku:'ACR-3MM-W',supplier:'Generic', active:true,updatedAt:''},
+    {id:'sh3',name:'PVC Foam Board 5mm',     width:1220,height:2440,thickness:5,costPerSheet:580, wastage:12,sku:'PVC-5MM',  supplier:'Generic', active:true,updatedAt:''},
+    {id:'sh4',name:'Aluminium Composite 3mm',width:1220,height:2440,thickness:3,costPerSheet:1200,wastage:10,sku:'ACP-3MM',  supplier:'Generic', active:true,updatedAt:''},
+    {id:'sh5',name:'LGP Panel 6mm',          width:1220,height:2440,thickness:6,costPerSheet:2800,wastage:8, sku:'LGP-6MM',  supplier:'LGP Tech',active:true,updatedAt:''},
+  ],
+  printing: [
+    {id:'pr1',name:'SEG Silicone Edge Fabric',printTypes:['dye-sub','uv'],    costPerSqFt:45,wastage:8,sku:'FAB-SEG', supplier:'Generic',active:true,updatedAt:''},
+    {id:'pr2',name:'Backlit Flex Banner',     printTypes:['solvent','uv'],     costPerSqFt:28,wastage:5,sku:'FLEX-BL', supplier:'Generic',active:true,updatedAt:''},
+    {id:'pr3',name:'Polyester Fabric',        printTypes:['dye-sub'],          costPerSqFt:38,wastage:8,sku:'FAB-POLY',supplier:'Generic',active:true,updatedAt:''},
+    {id:'pr4',name:'Canvas',                  printTypes:['uv','solvent'],     costPerSqFt:35,wastage:7,sku:'CANVAS',  supplier:'Generic',active:true,updatedAt:''},
+    {id:'pr5',name:'Mesh Banner',             printTypes:['solvent'],          costPerSqFt:22,wastage:5,sku:'MESH-BN', supplier:'Generic',active:true,updatedAt:''},
+  ],
+  accMaster: [
+    {id:'ac1',name:'Corner Joiner',     unit:'pcs',mandatory:true, unitCost:25, sku:'CJ-01',   supplier:'Generic',active:true,updatedAt:''},
+    {id:'ac2',name:'Flat Joiner',       unit:'pcs',mandatory:false,unitCost:45, sku:'FJ-01',   supplier:'Generic',active:true,updatedAt:''},
+    {id:'ac3',name:'SS Screw M5×16',   unit:'pcs',mandatory:true, unitCost:2,  sku:'SCR-M5',  supplier:'Generic',active:true,updatedAt:''},
+    {id:'ac4',name:'Wall Bracket 150mm',unit:'pcs',mandatory:false,unitCost:55, sku:'WB-150',  supplier:'Generic',active:true,updatedAt:''},
+    {id:'ac5',name:'Hanging Clamp',     unit:'pcs',mandatory:false,unitCost:85, sku:'HC-01',   supplier:'Generic',active:true,updatedAt:''},
+    {id:'ac6',name:'Wire Rope 3mm',     unit:'m',  mandatory:false,unitCost:45, sku:'WR-3MM',  supplier:'Generic',active:true,updatedAt:''},
+    {id:'ac7',name:'Eye Bolt M8',       unit:'pcs',mandatory:false,unitCost:35, sku:'EB-M8',   supplier:'Generic',active:true,updatedAt:''},
+    {id:'ac8',name:'Cleat Wall Mount',  unit:'pcs',mandatory:false,unitCost:120,sku:'CLEAT-01',supplier:'Generic',active:true,updatedAt:''},
+  ]
+};
+
+// ═══════════════════════════════════════════════════════════
+//  MASTERS — generic CRUD over localStorage
+// ═══════════════════════════════════════════════════════════
+const M = {
+  get(k)    { return DB.get(KEYS[k], JSON.parse(JSON.stringify(DEFAULTS[k] || []))); },
+  save(k,d) { DB.set(KEYS[k], d); },
+  active(k) { return this.get(k).filter(r => r.active !== false); },
+  add(k, rec) {
+    const d = this.get(k);
+    rec.id = 'id_' + Date.now();
+    rec.updatedAt = new Date().toISOString();
+    d.push(rec); this.save(k, d);
+    return rec;
+  },
+  update(k, id, patch) {
+    const d = this.get(k);
+    const i = d.findIndex(r => r.id === id);
+    if (i < 0) return;
+    Object.assign(d[i], patch, { updatedAt: new Date().toISOString() });
+    this.save(k, d);
+  },
+  del(k, id) { this.save(k, this.get(k).filter(r => r.id !== id)); }
+};
+
+// ═══════════════════════════════════════════════════════════
+//  CUT OPTIMIZER  —  First Fit Decreasing (FFD) Bin Packing
+//
+//  WHY THIS IS CORRECT:
+//  The old ERP called Math.ceil(sideLen / stockLen) for each of
+//  the 4 sides separately, giving 4 stock bars for a 4×2ft sign
+//  on 12ft stock. FFD packs ALL cuts together: [4,4,2,2] fits
+//  perfectly in ONE 12ft bar → 100% utilisation, zero waste.
+// ═══════════════════════════════════════════════════════════
+const CutOpt = {
+  /**
+   * @param {number[]} cuts - cut lengths in mm (unsorted)
+   * @param {number}   stockLen - stock bar length in mm
+   * @returns {Array<{cuts:number[], used:number, remaining:number}>}
+   */
+  pack(cuts, stockLen) {
+    const sorted = [...cuts].sort((a, b) => b - a); // descending
+    const bins = [];
+    for (const cut of sorted) {
+      let placed = false;
+      for (const bin of bins) {
+        if (bin.remaining >= cut) {
+          bin.cuts.push(cut);
+          bin.used      += cut;
+          bin.remaining -= cut;
+          placed = true;
+          break;
+        }
+      }
+      if (!placed) {
+        bins.push({ cuts: [cut], used: cut, remaining: stockLen - cut });
+      }
+    }
+    return bins;
+  },
+
+  analyse(bins, stockLen, costPerStock) {
+    const totalBars  = bins.length;
+    const totalUsed  = bins.reduce((s, b) => s + b.used, 0);
+    const totalCap   = totalBars * stockLen;
+    const totalWaste = totalCap - totalUsed;
+    // Reusable offcut: remaining >= 300 mm is practically reusable
+    const reusable   = bins.reduce((s, b) => s + (b.remaining >= 300 ? b.remaining : 0), 0);
+    const scrap      = totalWaste - reusable;
+    const util       = totalUsed / totalCap * 100;
+    const totalCost  = totalBars * costPerStock;
+    const scrapCost  = (scrap / stockLen) * costPerStock;
+    return { totalBars, totalUsed, totalCap, totalWaste, reusable, scrap, util, totalCost, scrapCost };
+  }
+};
+
+// ═══════════════════════════════════════════════════════════
+//  SHEET CALCULATOR  —  Area-based costing (NOT full-sheet)
+//
+//  WHY THIS IS CORRECT:
+//  Old ERP: sheetsRequired = ceil(signArea / sheetArea),
+//           cost = sheetsRequired × costPerSheet   ← WRONG
+//           (always charges for 1 full sheet minimum)
+//
+//  New logic: charge for actual sq.ft consumed + wastage %
+//  Formula:  chargeable = actual × (1 + wastage/100)
+//            cost       = chargeable × (costPerSheet / sheetSqFt)
+// ═══════════════════════════════════════════════════════════
+const SheetCalc = {
+  MM2_SQFT: 1 / (304.8 * 304.8),
+
+  calc(wMM, hMM, sheet, overrideWaste, overrideCost) {
+    const signArea  = wMM * hMM;
+    const sheetArea = sheet.width * sheet.height;
+    const cps       = overrideCost || sheet.costPerSheet;
+    const shSqFt    = sheetArea * this.MM2_SQFT;
+    const sigSqFt   = signArea  * this.MM2_SQFT;
+    const cpSqFt    = cps / shSqFt;
+    const wPct      = (overrideWaste !== null && overrideWaste !== '')
+                        ? parseFloat(overrideWaste) : (sheet.wastage || 0);
+    const wasteArea = sigSqFt * wPct / 100;
+    const chargeable= sigSqFt + wasteArea;
+    const chargedCost = Math.round(chargeable * cpSqFt);
+    const balance   = Math.max(0, shSqFt - sigSqFt);
+    return {
+      sigSqFt:   +sigSqFt.toFixed(3),
+      shSqFt:    +shSqFt.toFixed(3),
+      cpSqFt:    +cpSqFt.toFixed(2),
+      wPct,
+      wasteArea: +wasteArea.toFixed(3),
+      chargeable:+chargeable.toFixed(3),
+      chargedCost,
+      balance:   +balance.toFixed(3),
+      util:      +(sigSqFt / shSqFt * 100).toFixed(1)
+    };
+  }
+};
+
+// ═══════════════════════════════════════════════════════════
+//  LED CALCULATOR
+// ═══════════════════════════════════════════════════════════
+const LEDCalc = {
+
+  // ── MODULE GRID ──────────────────────────────────────────
+  // Grid placement across the full sign area.
+  // cols = floor((availW - modW) / (modW + hGap)) + 1
+  // rows = floor((availH - modH) / (modH + vGap)) + 1
+  //
+  // This gives the number of modules that FIT within the
+  // available area (sign minus edge margins on both sides).
+  calcModules(wMM, hMM, mod, marginMM, customHGap, customVGap) {
+    const hGap   = customHGap > 0 ? customHGap : mod.hGap;
+    const vGap   = customVGap > 0 ? customVGap : mod.vGap;
+    const availW = wMM - 2 * marginMM;
+    const availH = hMM - 2 * marginMM;
+    if (availW < mod.modW || availH < mod.modH) return null;
+
+    const cols = Math.max(1, Math.floor((availW - mod.modW) / (mod.modW + hGap)) + 1);
+    const rows = Math.max(1, Math.floor((availH - mod.modH) / (mod.modH + vGap)) + 1);
+    const total = cols * rows;
+    const watt  = +(total * mod.watt).toFixed(2);
+    const cost  = Math.round(total * mod.cost);
+
+    const signM2    = (wMM / 1000) * (hMM / 1000);
+    const density   = +(total / signM2).toFixed(1);
+    const wPerM2    = watt / signM2;
+    // Rough lux: ~90 lm/W efficacy, /4 diffusion through fabric
+    const lux       = Math.round(wPerM2 * 90 / 4);
+
+    const footW = cols * mod.modW + (cols - 1) * hGap;
+    const footH = rows * mod.modH + (rows - 1) * vGap;
+    return {
+      cols, rows, total, watt, cost, density, lux, hGap, vGap,
+      footW, footH, availW, availH,
+      covW: +(footW / availW * 100).toFixed(1),
+      covH: +(footH / availH * 100).toFixed(1)
+    };
+  },
+
+  // ── LED BARS — VERTICAL PLACEMENT ONLY ──────────────────
+  //
+  //  WHY VERTICAL?
+  //  - Rainwater drains downward; horizontal bars collect water.
+  //  - Industry standard for outdoor signage.
+  //  - Wiring runs cleanly along the height direction.
+  //
+  //  CORRECT FORMULA:
+  //  availW  = signWidth - 2 × edgeMargin
+  //  numBars = floor((availW + gap) / (barWidth + gap))
+  //
+  //  Derivation: n bars need n×barWidth + (n-1)×gap ≤ availW
+  //  ⟹  n ≤ (availW + gap) / (barWidth + gap)
+  //
+  //  Each bar column covers the FULL sign height.
+  //  piecesPerCol = ceil(signHeight / stockBarLen)
+  //  totalPieces  = numBars × piecesPerCol
+  // ────────────────────────────────────────────────────────
+  calcBars(wMM, hMM, bar, gapMM, marginMM) {
+    const availW = wMM - 2 * marginMM;
+    if (availW < bar.barWidth) return null;
+
+    const numBars      = Math.max(1, Math.floor((availW + gapMM) / (bar.barWidth + gapMM)));
+    const piecesPerCol = Math.ceil(hMM / bar.barLen);
+    const totalPieces  = numBars * piecesPerCol;
+    const cutWastePerCol = piecesPerCol * bar.barLen - hMM;   // mm wasted per column
+    const watt  = +(totalPieces * bar.watt).toFixed(2);
+    const cost  = Math.round(totalPieces * bar.cost);
+    // Centre-to-centre spacing between adjacent bars
+    const spacing = numBars > 1
+      ? +((availW - bar.barWidth) / (numBars - 1)).toFixed(1)
+      : availW;
+    return {
+      numBars, piecesPerCol, totalPieces, cutWastePerCol: +cutWastePerCol.toFixed(1),
+      watt, cost, spacing, availW, gapMM, marginMM
+    };
+  }
+};
+
+// ═══════════════════════════════════════════════════════════
+//  DRIVER OPTIMIZER
+//
+//  CORRECT LOGIC:
+//  1. requiredW = totalLEDwatt × (1 + safetyBuf/100)
+//  2. minCapacity = totalLEDwatt / (maxLoad/100)
+//     (ensures driver is never loaded beyond maxLoad %)
+//  3. Find smallest single driver that satisfies BOTH conditions.
+//  4. If no single driver exists, use multiples of the largest.
+//
+//  Example: 142W LED, 30% buffer, 80% max load
+//    requiredW   = 142 × 1.30 = 184.6W
+//    minCapacity = 142 / 0.80 = 177.5W
+//    → Select 200W driver (next standard size above 184.6W)
+// ═══════════════════════════════════════════════════════════
+const DriverOpt = {
+  optimise(ledWatt, safetyPct, maxLoadPct, drivers) {
+    if (!ledWatt || !drivers.length) return null;
+    const required  = ledWatt * (1 + safetyPct / 100);
+    const minCap    = ledWatt / (maxLoadPct / 100);
+    const threshold = Math.max(required, minCap);
+    const active    = [...drivers].filter(d => d.active !== false).sort((a, b) => a.watt - b.watt);
+
+    // Strategy 1: smallest single driver above threshold
+    const single = active.find(d => d.watt >= threshold);
+    if (single) {
+      return {
+        selected:  [{ drv: single, qty: 1 }],
+        totalCap:  single.watt,
+        required:  +required.toFixed(1),
+        util:      +(ledWatt / single.watt * 100).toFixed(1),
+        spare:     +(single.watt - ledWatt).toFixed(1),
+        totalCost: single.cost,
+        strategy:  'single'
+      };
+    }
+    // Strategy 2: multiple of the largest driver
+    const largest = active[active.length - 1];
+    if (!largest) return null;
+    const qty      = Math.ceil(threshold / largest.watt);
+    const totalCap = qty * largest.watt;
+    return {
+      selected:  [{ drv: largest, qty }],
+      totalCap,
+      required:  +required.toFixed(1),
+      util:      +(ledWatt / totalCap * 100).toFixed(1),
+      spare:     +(totalCap - ledWatt).toFixed(1),
+      totalCost: qty * largest.cost,
+      strategy:  'multiple'
+    };
+  }
+};
+
+
+// ═══════════════════════════════════════════════════════════
+//  APP STATE
+// ═══════════════════════════════════════════════════════════
+const ST = {
+  step: 1,
+  signType: '',
+  profile: null,
+  wMM: 0, hMM: 0,
+  ledMode: 'module',   // 'module' | 'bar'
+  ledMod:  null,
+  ledBar:  null,
+  accs:    [],         // [{id,name,qty,unitCost,unit,autoQty,locked,custom}]
+  calc:    {},
+};
+
+// ═══════════════════════════════════════════════════════════
+//  UTILS
+// ═══════════════════════════════════════════════════════════
+const CATMAP  = { nonlit:'nonlit', 'seg-indoor':'seg-indoor', 'backlit-outdoor':'seg-outdoor', 'outdoor-illum':'seg-outdoor' };
+const CATLABEL= { nonlit:'Non-Lit Sign','seg-indoor':'Backlit SEG Indoor','backlit-outdoor':'Backlit Outdoor','outdoor-illum':'Outdoor Illuminated' };
+const COLORS  = ['#4dabf7','#51cf66','#fcc419','#ff6b6b','#9775fa','#22b8cf','#ff922b','#a9e34b'];
+
+const isLit   = () => ST.signType !== 'nonlit';
+const toMM    = (v, u) => u==='feet' ? v*304.8 : u==='inches' ? v*25.4 : v;
+const rnd     = n => Math.round(n);
+const fmtR    = n => typeof n==='number' ? '₹'+rnd(n).toLocaleString('en-IN') : '—';
+const gv      = id => { const el=document.getElementById(id); return el ? el.value : ''; };
+const sv      = (id,val) => { const el=document.getElementById(id); if(el) el.value=val; };
+const uid     = () => 'c_'+Date.now()+'_'+Math.random().toString(36).slice(2,5);
+
+// ═══════════════════════════════════════════════════════════
+//  NAVIGATION
+// ═══════════════════════════════════════════════════════════
+function showPage(id, btn) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById('page-' + id).classList.add('active');
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+  const titles = {
+    estimator:'New Estimate', history:'History',
+    mp:'Profiles Master', mm:'LED Modules Master', mb:'LED Bars Master',
+    md:'Drivers Master', ms:'Sheet Materials Master',
+    mpr:'Printing Media Master', ma:'Accessories Master',
+    dashboard:'Dashboard', costsheet:'Cost Sheet'
+  };
+  document.getElementById('topbar-title').textContent = titles[id] || id;
+  if (id==='mp')  renderMT('profiles');
+  if (id==='mm')  renderMT('ledMods');
+  if (id==='mb')  renderMT('ledBars');
+  if (id==='md')  renderMT('drivers');
+  if (id==='ms')  renderMT('sheets');
+  if (id==='mpr') renderMT('printing');
+  if (id==='ma')  renderMT('accMaster');
+  if (id==='dashboard') renderDash();
+  if (id==='history')   renderHist();
+}
+
+function goStep(n) {
+  if (n >= 2 && !ST.signType)         { alert('Select a sign category first.'); return; }
+  if (n >= 3 && (!ST.wMM || !ST.hMM)){ alert('Enter width and height first.'); return; }
+  ST.step = n;
+  for (let i = 1; i <= 6; i++) {
+    document.getElementById('s' + i).style.display = (i === n) ? 'block' : 'none';
+    const el = document.getElementById('si' + i);
+    el.classList.toggle('active', i === n);
+    el.classList.toggle('done',   i <  n);
+  }
+  if (n >= 3) calcAll();
+}
+function jumpStep(n) { if (n <= ST.step) goStep(n); }
+
+// ═══════════════════════════════════════════════════════════
+//  STEP 1 — SIGN TYPE
+// ═══════════════════════════════════════════════════════════
+function onCatChange() {
+  const cat = gv('s1cat');
+  ST.signType = cat;
+  const pWrap = document.getElementById('wrapProfile');
+  const infoEl = document.getElementById('s1info');
+  if (!cat) { pWrap.style.display='none'; infoEl.style.display='none'; return; }
+  const catKey = CATMAP[cat];
+  const profs  = M.active('profiles').filter(p => p.category === catKey);
+  const sel    = document.getElementById('s1profile');
+  sel.innerHTML = '<option value="">— select profile —</option>'
+    + profs.map(p => `<option value="${p.id}">${p.name} (${p.stockLen}mm stock | ₹${p.cost})</option>`).join('');
+  pWrap.style.display = 'block';
+  const msgs = {
+    nonlit:          'Non-Lit SEG frame — Profile, backing sheet, printing. No LED.',
+    'seg-indoor':    'Backlit SEG Indoor — LED modules or bars + driver + SEG fabric.',
+    'backlit-outdoor':'Backlit Outdoor — Heavy outdoor SEG profile. IP65+ LEDs mandatory.',
+    'outdoor-illum': 'Outdoor Illuminated — Heavy-duty outdoor frame, IP65/67 LED bars, waterproof drivers.'
+  };
+  document.getElementById('s1infoTxt').textContent = msgs[cat] || '';
+  infoEl.style.display = 'flex';
+  ST.profile = null; sel.value = '';
+  calcAll();
+}
+function onProfileChange() {
+  const id = gv('s1profile');
+  ST.profile = M.active('profiles').find(p => p.id === id) || null;
+  calcAll();
+}
+
+// ═══════════════════════════════════════════════════════════
+//  STEP 2 — DIMENSIONS
+// ═══════════════════════════════════════════════════════════
+function getDims() {
+  const unit = gv('s2unit');
+  const w = parseFloat(gv('s2w')) || 0;
+  const h = parseFloat(gv('s2h')) || 0;
+  return { wMM: toMM(w, unit), hMM: toMM(h, unit), w, h, unit };
+}
+
+// ═══════════════════════════════════════════════════════════
+//  MAIN CALC ENGINE
+// ═══════════════════════════════════════════════════════════
+function calcAll() {
+  const { wMM, hMM, w, h, unit } = getDims();
+  ST.wMM = wMM; ST.hMM = hMM;
+  if (!wMM || !hMM) return;
+
+  // Dim display
+  const sqft  = (wMM/304.8)*(hMM/304.8);
+  const m2    = (wMM/1000)*(hMM/1000);
+  const perim = (wMM*2+hMM*2)/1000;
+  document.getElementById('dmW').textContent  = rnd(wMM)+'';
+  document.getElementById('dmH').textContent  = rnd(hMM)+'';
+  document.getElementById('dmA').textContent  = sqft.toFixed(2);
+  document.getElementById('dmM2').textContent = m2.toFixed(3);
+  document.getElementById('dmP').textContent  = perim.toFixed(2);
+  if (unit !== 'mm') {
+    document.getElementById('s2conv').style.display = 'flex';
+    document.getElementById('s2convTxt').textContent = `${w} ${unit} × ${h} ${unit}  →  ${rnd(wMM)}mm × ${rnd(hMM)}mm`;
+  } else {
+    document.getElementById('s2conv').style.display = 'none';
+  }
+
+  const c = {};
+  calcProfile(wMM, hMM, c);
+  calcSheet(wMM, hMM, c);
+  calcAccs(wMM, hMM, c);
+
+  const lit = isLit();
+  document.getElementById('s4noled').style.display    = lit ? 'none'  : 'flex';
+  document.getElementById('s4ledArea').style.display  = lit ? 'block' : 'none';
+  if (lit) calcLED(wMM, hMM, c); else { c.ledCost=0; c.drvCost=0; c.totalWatt=0; c.ledMode=ST.ledMode; }
+
+  calcPrint(wMM, hMM, c);
+  calcPricing(c);
+  ST.calc = c;
+  document.getElementById('est-badge').style.display = 'inline-block';
+  document.getElementById('est-badge').textContent   = 'EST-' + Date.now().toString().slice(-6);
+}
+
+// ─── PROFILE ────────────────────────────────────────────────
+function calcProfile(wMM, hMM, c) {
+  const el   = document.getElementById('s3prof');
+  const prof = ST.profile;
+  if (!prof) {
+    el.innerHTML = '<div class="alert a-warn"><i class="ti ti-alert-circle"></i>No profile selected — go to Step 1.</div>';
+    c.profCost=0; c.profScrap=0; c.profBars=0; return;
+  }
+  const sLen = prof.stockLen;
+  const cuts = [wMM, wMM, hMM, hMM];           // 4 sides
+  const bins = CutOpt.pack(cuts, sLen);
+  const a    = CutOpt.analyse(bins, sLen, prof.cost);
+
+  c.profCost  = rnd(a.totalCost);
+  c.profScrap = rnd(a.scrapCost);
+  c.profBars  = a.totalBars;
+  // Extra fields for cost sheet report
+  c.profType  = prof.name;
+  c.profW     = wMM;
+  c.profH     = hMM;
+  c.profStock = sLen;
+  c.profUtil  = a.util.toFixed(1);
+
+  const needJoin = cuts.some(cut => cut > sLen);
+
+  // ── visual bins ──
+  const binRows = bins.map((bin, i) => {
+    const cutBlocks = bin.cuts.map((cut, j) => {
+      const pct = (cut / sLen * 100).toFixed(1);
+      const lbl = cut >= 200 ? (cut/1000).toFixed(2)+'m' : '';
+      return `<div class="bin-cut" style="width:${pct}%;background:${COLORS[j%COLORS.length]}" title="${(cut/1000).toFixed(3)}m">${lbl}</div>`;
+    }).join('');
+    const scrapPct = (bin.remaining / sLen * 100).toFixed(1);
+    const scrapLbl = bin.remaining >= 300 ? '↩ '+(bin.remaining/1000).toFixed(2)+'m' : '';
+    return `<div class="bin-row">
+      <div class="bin-lbl">Stock ${i+1}</div>
+      <div class="bin-track">${cutBlocks}${parseFloat(scrapPct)>0?`<div class="bin-scrap" style="width:${scrapPct}%" title="${(bin.remaining/1000).toFixed(3)}m leftover">${scrapLbl}</div>`:''}</div>
+      <div class="bin-info">${(bin.used/sLen*100).toFixed(0)}% used</div>
+    </div>`;
+  }).join('');
+
+  const cutsInfo = ['Top','Bottom','Left','Right'].map((s,i)=>
+    `<tr><td>${s}</td><td>${(cuts[i]/1000).toFixed(3)} m</td><td>${(cuts[i]/304.8).toFixed(3)} ft</td></tr>`
+  ).join('');
+
+  el.innerHTML = `
+  <div class="g4" style="margin-bottom:10px">
+    <div class="mc blue"><div class="mc-lbl">Stock Bars Used</div><div class="mc-val">${a.totalBars}</div><div class="mc-sub">${(sLen/1000).toFixed(1)}m × ₹${prof.cost}</div></div>
+    <div class="mc green"><div class="mc-lbl">Utilisation</div><div class="mc-val">${a.util.toFixed(1)}%</div></div>
+    <div class="mc"><div class="mc-lbl">Reusable Offcut</div><div class="mc-val">${(a.reusable/1000).toFixed(2)}m</div></div>
+    <div class="mc orange"><div class="mc-lbl">Scrap Cost</div><div class="mc-val">${fmtR(a.scrapCost)}</div></div>
+  </div>
+  <table class="tbl" style="margin-bottom:10px">
+    <thead><tr><th>Side</th><th>Cut Length (m)</th><th>Cut Length (ft)</th></tr></thead>
+    <tbody>${cutsInfo}</tbody>
+    <tfoot><tr class="sub"><td>Perimeter total</td><td>${((wMM*2+hMM*2)/1000).toFixed(3)}m</td><td>${((wMM*2+hMM*2)/304.8).toFixed(3)}ft</td></tr></tfoot>
+  </table>
+  <div style="font-size:10px;font-weight:700;color:var(--text3);margin-bottom:4px;text-transform:uppercase;letter-spacing:.6px">
+    Bin-Packing Result — First Fit Decreasing (FFD)
+  </div>
+  <div class="bins">${binRows}</div>
+  ${needJoin ? '<div class="alert a-warn" style="margin-top:8px"><i class="ti ti-alert-triangle"></i>One or more cuts exceed the stock length — flat joiners required. Add them in the Accessories section.</div>' : ''}
+  <div style="display:flex;gap:6px;margin-top:8px;flex-wrap:wrap">
+    <span class="tag"><i class="ti ti-shopping-cart"></i>${a.totalBars} × ${(sLen/1000).toFixed(1)}m bars</span>
+    <span class="tag" style="color:var(--success)"><i class="ti ti-recycle"></i>Reusable: ${(a.reusable/1000).toFixed(2)}m</span>
+    <span class="tag" style="color:var(--danger)"><i class="ti ti-trash"></i>Scrap: ${(a.scrap/1000).toFixed(2)}m = ${fmtR(a.scrapCost)}</span>
+    <span class="tag" style="color:var(--accent);font-weight:600"><i class="ti ti-currency-rupee"></i>Profile total: ${fmtR(a.totalCost)}</span>
+  </div>`;
+}
+
+// ─── SHEET ──────────────────────────────────────────────────
+function calcSheet(wMM, hMM, c) {
+  const shId = gv('s3sheet');
+  const el   = document.getElementById('s3sheetRes');
+  if (!shId) { el.innerHTML=''; c.sheetCost=0; return; }
+  const sheet = M.active('sheets').find(s => s.id === shId);
+  if (!sheet) { c.sheetCost=0; return; }
+  const r = SheetCalc.calc(wMM, hMM, sheet, gv('s3waste')||null, parseFloat(gv('s3sheetCost'))||null);
+  c.sheetCost        = r.chargedCost;
+  // Extra fields for cost sheet report
+  c.sheetType        = sheet.name;
+  c.signSqFt         = r.sigSqFt;
+  c.sheetWaste       = r.wPct;
+  c.chargeableSqFt   = r.chargeable;
+  c.sheetCostPerSqFt = r.cpSqFt;
+
+  el.innerHTML = `
+  <div class="g5" style="margin-top:8px">
+    <div class="mc"><div class="mc-lbl">Sign Area (actual)</div><div class="mc-val">${r.sigSqFt}</div><div class="mc-sub">sq.ft</div></div>
+    <div class="mc orange"><div class="mc-lbl">Wastage (${r.wPct}%)</div><div class="mc-val">${r.wasteArea.toFixed(2)}</div><div class="mc-sub">sq.ft</div></div>
+    <div class="mc blue"><div class="mc-lbl">Chargeable Area</div><div class="mc-val">${r.chargeable.toFixed(2)}</div><div class="mc-sub">sq.ft</div></div>
+    <div class="mc"><div class="mc-lbl">Sheet Balance</div><div class="mc-val">${r.balance.toFixed(2)}</div><div class="mc-sub">sq.ft recoverable</div></div>
+    <div class="mc green"><div class="mc-lbl">Sheet Cost</div><div class="mc-val">${fmtR(r.chargedCost)}</div><div class="mc-sub">@ ₹${r.cpSqFt}/sq.ft</div></div>
+  </div>
+  <div class="alert a-info" style="margin-top:8px"><i class="ti ti-info-circle"></i>
+    Charged for <strong>${r.chargeable.toFixed(2)} sq.ft</strong> = actual ${r.sigSqFt} sq.ft + ${r.wPct}% wastage.
+    Full sheet = ${r.shSqFt.toFixed(2)} sq.ft. Balance <strong>${r.balance.toFixed(2)} sq.ft recoverable</strong>.
+  </div>`;
+}
+
+// ─── ACCESSORIES ─────────────────────────────────────────────
+function initAccs(wMM, hMM) {
+  const sLen = ST.profile ? ST.profile.stockLen : 4000;
+  const corners  = 4;
+  const needJoin = wMM > sLen || hMM > sLen;
+  const flatJ    = needJoin ? Math.ceil((wMM + hMM) / 2 / sLen) : 0;
+  const screws   = corners * 4 + flatJ * 2;
+  const brackets = Math.max(2, Math.ceil((wMM + hMM) / 1000 / 0.8));
+  const autoQty  = { ac1:corners, ac2:flatJ, ac3:screws, ac4:brackets };
+
+  if (!ST.accs.length) {
+    ST.accs = M.active('accMaster').map(a => ({
+      id:a.id, name:a.name, qty:autoQty[a.id]||0, unitCost:a.unitCost,
+      unit:a.unit, mandatory:a.mandatory,
+      autoQty:autoQty[a.id]||0, locked:false, custom:false
+    }));
+  } else {
+    ST.accs.forEach(a => {
+      if (autoQty[a.id] !== undefined && !a.locked) a.qty = autoQty[a.id];
+    });
+  }
+}
+
+function calcAccs(wMM, hMM, c) {
+  initAccs(wMM, hMM);
+  renderAccsTable();
+  c.accCost = ST.accs.reduce((s, a) => s + a.qty * a.unitCost, 0);
+  c.accs    = ST.accs.map(a => ({...a})); // snapshot for cost sheet report
+}
+
+function renderAccsTable() {
+  const el = document.getElementById('s3acc');
+  if (!ST.accs.length) { el.innerHTML='<p style="color:var(--text3);font-size:12px">Accessories master is empty. Add items in Masters → Accessories.</p>'; return; }
+  const rows = ST.accs.map((a, i) => `
+    <tr>
+      <td>
+        <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:12px;font-weight:400;color:var(--text)">
+          <input type="checkbox" ${a.qty>0?'checked':''} onchange="toggleAcc(${i},this.checked)">
+          ${a.name}
+          ${a.mandatory ? '<span class="badge bg-blue" style="font-size:9px">auto</span>' : ''}
+        </label>
+      </td>
+      <td><input type="number" style="width:70px;padding:3px 6px;font-size:12px" value="${a.qty}" min="0" onchange="updateAccQty(${i},this.value)"></td>
+      <td style="font-size:12px;color:var(--text3)">${a.unit}</td>
+      <td><input type="number" style="width:80px;padding:3px 6px;font-size:12px" value="${a.unitCost}" min="0" onchange="updateAccCost(${i},this.value)"></td>
+      <td class="num" style="font-size:12px;font-weight:600">${fmtR(a.qty * a.unitCost)}</td>
+      ${a.custom ? `<td><button class="btn-ghost btn-sm" onclick="removeAcc(${i})"><i class="ti ti-trash" style="color:var(--danger)"></i></button></td>` : '<td></td>'}
+    </tr>`).join('');
+  const total = ST.accs.reduce((s, a) => s + a.qty * a.unitCost, 0);
+  el.innerHTML = `<table class="tbl">
+    <thead><tr><th>Item</th><th>Qty</th><th>Unit</th><th>Unit Cost ₹</th><th class="num">Total</th><th></th></tr></thead>
+    <tbody>${rows}</tbody>
+    <tfoot><tr class="sub"><td colspan="4"><strong>Accessories Total</strong></td><td class="num"><strong>${fmtR(total)}</strong></td><td></td></tr></tfoot>
+  </table>`;
+}
+
+function toggleAcc(i, checked) {
+  ST.accs[i].qty = checked ? (ST.accs[i].autoQty || 1) : 0;
+  ST.accs[i].locked = true;
+  _refreshAccCost();
+}
+function updateAccQty(i, v)  { ST.accs[i].qty = parseFloat(v)||0; ST.accs[i].locked=true; _refreshAccCost(); }
+function updateAccCost(i, v) { ST.accs[i].unitCost = parseFloat(v)||0; ST.accs[i].locked=true; _refreshAccCost(); }
+function removeAcc(i)        { ST.accs.splice(i,1); renderAccsTable(); _refreshAccCost(); }
+function addCustomAcc() {
+  ST.accs.push({ id:uid(), name:'Custom Item', qty:1, unitCost:0, unit:'pcs', mandatory:false, autoQty:0, locked:true, custom:true });
+  renderAccsTable();
+}
+function _refreshAccCost() {
+  renderAccsTable();
+  ST.calc.accCost = ST.accs.reduce((s,a)=>s+a.qty*a.unitCost,0);
+  calcPricing(ST.calc);
+}
+
+// ─── LED ─────────────────────────────────────────────────────
+function switchLedTab(mode, btn) {
+  ST.ledMode = mode;
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('tp-module').classList.toggle('active', mode==='module');
+  document.getElementById('tp-bar').classList.toggle('active',    mode==='bar');
+  calcAll();
+}
+// Called from init() — ensures module tab is active on load
+function onLedModeChange() {
+  switchLedTab(ST.ledMode, document.getElementById('tab-mod'));
+}
+function onLedModChange() {
+  ST.ledMod = M.active('ledMods').find(m => m.id === gv('s4modType')) || null;
+  calcAll();
+}
+function onLedBarChange() {
+  ST.ledBar = M.active('ledBars').find(b => b.id === gv('s4barType')) || null;
+  calcAll();
+}
+
+function calcLED(wMM, hMM, c) {
+  c.ledCost=0; c.drvCost=0; c.totalWatt=0;
+
+  if (ST.ledMode === 'module') {
+    const mod = ST.ledMod;
+    if (!mod) { document.getElementById('s4modRes').innerHTML='<div class="alert a-warn"><i class="ti ti-alert-circle"></i>Select a module type.</div>'; return; }
+    const margin = parseFloat(gv('s4modMargin'))||30;
+    const hGap   = parseFloat(gv('s4modHGap'))||0;
+    const vGap   = parseFloat(gv('s4modVGap'))||0;
+    const r = LEDCalc.calcModules(wMM, hMM, mod, margin, hGap, vGap);
+    if (!r) { document.getElementById('s4modRes').innerHTML='<div class="alert a-err"><i class="ti ti-alert-circle"></i>Sign too small for margin. Reduce edge margin.</div>'; return; }
+    const custC = parseFloat(gv('s4modCost'))||null;
+    const uCost = custC || mod.cost;
+    c.ledCost   = rnd(r.total * uCost);
+    c.totalWatt = r.watt;
+    c.ledMode   = 'module';
+    // Cost sheet report fields
+    c.modModel  = mod.name;
+    c.modCols   = r.cols;
+    c.modRows   = r.rows;
+    c.modCount  = r.total;
+    c.modWatt   = r.watt;
+
+    const luxCls = r.lux>=250?'bg-green':r.lux>=150?'bg-orange':'bg-red';
+    const luxMsg = r.lux>=250 ? 'High brightness — excellent for large signage.'
+                : r.lux>=150 ? 'Standard brightness — suitable for most applications.'
+                             : 'Low brightness — increase density or use higher-watt modules.';
+    document.getElementById('s4modRes').innerHTML = `
+    <div class="g5" style="margin-bottom:10px">
+      <div class="mc blue"><div class="mc-lbl">Columns</div><div class="mc-val">${r.cols}</div></div>
+      <div class="mc blue"><div class="mc-lbl">Rows</div><div class="mc-val">${r.rows}</div></div>
+      <div class="mc"><div class="mc-lbl">Total Modules</div><div class="mc-val">${r.total}</div></div>
+      <div class="mc orange"><div class="mc-lbl">Total Wattage</div><div class="mc-val">${r.watt}W</div></div>
+      <div class="mc green"><div class="mc-lbl">LED Cost</div><div class="mc-val">${fmtR(c.ledCost)}</div></div>
+    </div>
+    <div class="g4">
+      <div class="mc"><div class="mc-lbl">Density</div><div class="mc-val">${r.density}</div><div class="mc-sub">mod/m²</div></div>
+      <div class="mc"><div class="mc-lbl">H-Gap</div><div class="mc-val">${r.hGap}mm</div></div>
+      <div class="mc"><div class="mc-lbl">V-Gap</div><div class="mc-val">${r.vGap}mm</div></div>
+      <div class="mc"><div class="mc-lbl">Est. Lux</div><div class="mc-val"><span class="badge ${luxCls}">${r.lux} lx</span></div></div>
+    </div>
+    <div class="alert a-info" style="margin-top:8px"><i class="ti ti-eye"></i>${luxMsg} Coverage: ${r.covW}% W × ${r.covH}% H of available area (${r.availW}×${r.availH}mm).</div>`;
+
+  } else {
+    // LED BARS — VERTICAL
+    const bar = ST.ledBar;
+    if (!bar) { document.getElementById('s4barRes').innerHTML='<div class="alert a-warn"><i class="ti ti-alert-circle"></i>Select a bar type.</div>'; return; }
+    const gap    = parseFloat(gv('s4barGap'))||100;
+    const margin = parseFloat(gv('s4barMargin'))||50;
+    const r = LEDCalc.calcBars(wMM, hMM, bar, gap, margin);
+    if (!r) { document.getElementById('s4barRes').innerHTML='<div class="alert a-err"><i class="ti ti-alert-circle"></i>Sign too narrow for margin.</div>'; return; }
+    const custC = parseFloat(gv('s4barCost'))||null;
+    const uCost = custC || bar.cost;
+    c.ledCost   = rnd(r.totalPieces * uCost);
+    c.totalWatt = r.watt;
+    c.ledMode   = 'bar';
+    // Cost sheet report fields
+    c.barModel       = bar.name;
+    c.barCount       = r.numBars;
+    c.piecesPerCol   = r.piecesPerCol;
+    c.totalBarPieces = r.totalPieces;
+    c.barWatt        = r.watt;
+
+    // SVG diagram  — vertical bars across sign width
+    const dW = 480; const dH = Math.max(60, rnd(hMM / wMM * dW * 0.6));
+    const scale = dW / wMM;
+    const barPxW = Math.max(2, rnd(bar.barWidth * scale));
+    let svgBars = '';
+    for (let i = 0; i < r.numBars; i++) {
+      const xCtr = i === 0
+        ? rnd(margin * scale)
+        : rnd(margin * scale + i * r.spacing * scale);
+      const x = xCtr;
+      svgBars += `<rect x="${x}" y="${rnd(margin*scale*0.3)}" width="${barPxW}" height="${rnd((hMM-margin*0.4)*scale/dW*dH*0.85)}" fill="#4dabf7" rx="1" opacity=".85"><title>Bar col ${i+1}</title></rect>`;
+    }
+    document.getElementById('s4barRes').innerHTML = `
+    <div class="g5" style="margin-bottom:10px">
+      <div class="mc blue"><div class="mc-lbl">Vertical Bars</div><div class="mc-val">${r.numBars}</div></div>
+      <div class="mc"><div class="mc-lbl">Pieces/Column</div><div class="mc-val">${r.piecesPerCol}</div><div class="mc-sub">${bar.barLen}mm stock</div></div>
+      <div class="mc"><div class="mc-lbl">Total Pieces</div><div class="mc-val">${r.totalPieces}</div></div>
+      <div class="mc orange"><div class="mc-lbl">Total Wattage</div><div class="mc-val">${r.watt}W</div></div>
+      <div class="mc green"><div class="mc-lbl">Bar Cost</div><div class="mc-val">${fmtR(c.ledCost)}</div></div>
+    </div>
+    <table class="tbl" style="margin-bottom:8px">
+      <thead><tr><th>Orientation</th><th>Bar Columns</th><th>Height Needed</th><th>Pieces/Col</th><th>Cut Waste/Col</th><th>C-C Spacing</th></tr></thead>
+      <tbody><tr>
+        <td><span class="badge bg-blue">VERTICAL ↕</span></td>
+        <td>${r.numBars}</td>
+        <td>${(hMM/1000).toFixed(3)}m</td>
+        <td>${r.piecesPerCol} × ${bar.barLen}mm</td>
+        <td>${r.cutWastePerCol}mm</td>
+        <td>${r.spacing}mm</td>
+      </tr></tbody>
+    </table>
+    <div class="led-diag">
+      <div style="font-size:10px;font-weight:700;color:var(--text3);margin-bottom:4px;text-transform:uppercase;letter-spacing:.5px">Sign Layout — Vertical LED Bars (front view)</div>
+      <svg width="${dW}" height="${dH}" viewBox="0 0 ${dW} ${dH}" style="display:block">
+        <rect x="0" y="0" width="${dW}" height="${dH}" fill="var(--surface3)" rx="4"/>
+        <rect x="${rnd(margin*scale*0.5)}" y="${rnd(margin*scale*0.2)}" width="${dW-rnd(margin*scale)}" height="${dH-rnd(margin*scale*0.4)}" fill="var(--surface2)" stroke="var(--border)" stroke-width="1" rx="2"/>
+        ${svgBars}
+        <text x="${dW/2}" y="${dH-3}" text-anchor="middle" font-size="9" fill="var(--text3)">${r.numBars} vertical bar columns — ${wMM}mm wide sign — gap ${gap}mm</text>
+      </svg>
+    </div>
+    <div style="display:flex;gap:6px;margin-top:8px;flex-wrap:wrap">
+      <span class="tag"><i class="ti ti-align-center"></i>${r.numBars} columns × ${r.piecesPerCol} pieces = ${r.totalPieces} bar pieces total</span>
+      <span class="tag" style="color:var(--warn)"><i class="ti ti-cut"></i>Cut waste: ${r.cutWastePerCol}mm/col × ${r.numBars} = ${(r.cutWastePerCol*r.numBars/1000).toFixed(2)}m total</span>
+    </div>`;
+  }
+
+  // ── DRIVER ──
+  const safety  = parseInt(gv('s4safety'))||25;
+  const maxLoad = parseInt(gv('s4maxload'))||80;
+  const dr = DriverOpt.optimise(c.totalWatt, safety, maxLoad, M.active('drivers'));
+  const dEl = document.getElementById('s4drvRes');
+  if (!dr) { dEl.innerHTML='<div class="alert a-warn"><i class="ti ti-alert-circle"></i>No active drivers in master. Add drivers first.</div>'; return; }
+  c.drvCost  = dr.totalCost;
+  // Cost sheet report fields
+  c.drvResult = {
+    requiredW: dr.required,
+    count:     dr.selected.reduce((s,x)=>s+x.qty,0),
+    driverW:   dr.selected[0]?.drv.watt||0,
+    util:      dr.util
+  };
+  const loadCls = dr.util<=70?'bg-green':dr.util<=85?'bg-orange':'bg-red';
+  const dRows = dr.selected.map(s =>
+    `<tr><td><strong>${s.drv.watt}W</strong></td><td>${s.drv.brand}</td><td>${s.drv.volt}V DC</td><td>${s.qty}</td>
+     <td>${s.qty*s.drv.watt}W</td>
+     <td><span class="badge ${loadCls}">${dr.util}%</span></td>
+     <td class="num">${fmtR(s.drv.cost*s.qty)}</td></tr>`).join('');
+  const warnLoading = dr.util > 85
+    ? '<div class="alert a-warn" style="margin-top:6px"><i class="ti ti-alert-triangle"></i>Driver loading above 85% — consider next size up for longevity and safety.</div>' : '';
+  dEl.innerHTML = `
+  <div class="alert a-info" style="margin-bottom:8px"><i class="ti ti-info-circle"></i>
+    LED load: <strong>${c.totalWatt}W</strong>
+    → +${safety}% safety buffer: <strong>${dr.required}W</strong>
+    → max ${maxLoad}% load → min capacity: <strong>${(c.totalWatt/(maxLoad/100)).toFixed(1)}W</strong>
+    → selected: <strong>${dr.totalCap}W</strong>
+  </div>
+  <table class="tbl">
+    <thead><tr><th>Wattage</th><th>Brand</th><th>Voltage</th><th>Qty</th><th>Total Cap</th><th>LED Load %</th><th class="num">Cost</th></tr></thead>
+    <tbody>${dRows}</tbody>
+    <tfoot><tr class="sub"><td colspan="6"><strong>Driver Total</strong></td><td class="num"><strong>${fmtR(dr.totalCost)}</strong></td></tr></tfoot>
+  </table>
+  <div style="display:flex;gap:6px;margin-top:6px;flex-wrap:wrap">
+    <span class="tag"><i class="ti ti-bolt"></i>Spare: ${dr.spare}W</span>
+    <span class="tag"><i class="ti ti-shield-check"></i>${dr.strategy==='single'?'Single driver (optimal wiring)':'Multiple drivers (parallel)'}</span>
+  </div>${warnLoading}`;
+}
+
+// ─── PRINT ────────────────────────────────────────────────────
+function calcPrint(wMM, hMM, c) {
+  const mediaId = gv('s5media');
+  const el = document.getElementById('s5res');
+  if (!mediaId) { el.innerHTML=''; c.printCost=0; return; }
+  const media = M.active('printing').find(p => p.id === mediaId);
+  if (!media) { c.printCost=0; return; }
+
+  const bleed   = parseFloat(gv('s5bleed'))||30;
+  const custW   = parseFloat(gv('s5waste'))||0;
+  const wPct    = custW > 0 ? custW : (media.wastage||0);
+  const custC   = parseFloat(gv('s5printCost'))||null;
+  const cpSqFt  = custC || media.costPerSqFt;
+
+  const pW      = (wMM + bleed*2) / 304.8;
+  const pH      = (hMM + bleed*2) / 304.8;
+  const baseArea= pW * pH;
+  const wasteA  = baseArea * wPct / 100;
+  const chgArea = baseArea + wasteA;
+  const printBase = chgArea * cpSqFt;
+
+  const perimM  = (wMM*2 + hMM*2) / 1000;
+  let finishing = 0;
+  const finRows = [];
+
+  if (document.getElementById('finSeg').checked && isLit()) {
+    const r = parseFloat(gv('segRate'))||35;
+    const cost = perimM * r;
+    finishing += cost;
+    finRows.push(['SEG Silicone Border', `${perimM.toFixed(2)}m × ₹${r}/m`, cost]);
+  }
+  if (document.getElementById('finHem').checked) {
+    const r = parseFloat(gv('hemRate'))||120;
+    finishing += r;
+    finRows.push(['Hemming / Heat-seal', 'Flat rate', r]);
+  }
+  [['finEye','Eyelets'],['finWeld','Welding'],['finStitch','Stitching']].forEach(([id,name]) => {
+    if (document.getElementById(id)?.checked) {
+      const r = parseFloat(gv('finRate'))||80;
+      finishing += r;
+      finRows.push([name, 'Flat rate', r]);
+    }
+  });
+
+  c.printCost = rnd(printBase + finishing);
+  // Cost sheet report fields
+  c.printMedia       = media.name;
+  c.printSqFt        = +chgArea.toFixed(3);
+  c.printCostPerSqFt = cpSqFt;
+  c.finishing        = finRows.length ? finRows.map(f=>f[0]).join(', ') : 'None';
+  const finHtml = finRows.map(f => `<tr><td>${f[0]}</td><td>${f[1]}</td><td class="num">${fmtR(f[2])}</td></tr>`).join('');
+
+  el.innerHTML = `
+  <table class="tbl">
+    <thead><tr><th>Item</th><th>Detail</th><th class="num">Cost</th></tr></thead>
+    <tbody>
+      <tr><td>Print area (incl. ${bleed}mm bleed)</td>
+        <td>${pW.toFixed(2)}ft × ${pH.toFixed(2)}ft = ${baseArea.toFixed(2)} sq.ft + ${wPct}% waste = ${chgArea.toFixed(2)} sq.ft chargeable</td>
+        <td class="num">${fmtR(printBase)}</td></tr>
+      ${finHtml}
+    </tbody>
+    <tfoot><tr class="sub"><td colspan="2"><strong>Total Print &amp; Finishing</strong></td><td class="num"><strong>${fmtR(c.printCost)}</strong></td></tr></tfoot>
+  </table>`;
+}
+
+// ─── PRICING ─────────────────────────────────────────────────
+function calcPricing(c) {
+  const qty     = parseInt(gv('s1qty'))||1;
+  const labour  = parseFloat(gv('s6labour'))||0;
+  const install = parseFloat(gv('s6install'))||0;
+  const ovhPct  = parseFloat(gv('s6overhead'))||0;
+  const mkPct   = parseFloat(gv('s6markup'))||0;
+  const discPct = parseFloat(gv('s6discount'))||0;
+  const gstPct  = parseFloat(gv('s6gst'))||18;
+
+  const raw     = (c.profCost||0)+(c.sheetCost||0)+(c.accCost||0)+(c.ledCost||0)+(c.drvCost||0)+(c.printCost||0);
+  const ovh     = rnd(raw * ovhPct/100);
+  const costPer = raw + ovh + labour + install;
+  const costAll = costPer * qty;
+  const waste   = (c.profScrap||0);
+  const sellBD  = rnd(costAll * (1 + mkPct/100));
+  const discAmt = rnd(sellBD * discPct/100);
+  const sell    = sellBD - discAmt;
+  const gstAmt  = rnd(sell * gstPct/100);
+  const final   = sell + gstAmt;
+  const margin  = sell > 0 ? rnd((sell - costAll)/sell*100) : 0;
+  const mgnAmt  = sell - costAll;
+
+  Object.assign(c, { raw,ovh,costPer,costAll,waste,sellBD,discAmt,sell,gstAmt,final,margin,mgnAmt,qty,labour,install,ovhPct,mkPct,discPct,gstPct });
+
+  document.getElementById('pcMat').textContent    = fmtR(raw);
+  document.getElementById('pcSell').textContent   = fmtR(sell);
+  document.getElementById('pcMargin').textContent = margin+'%';
+  document.getElementById('pcFinal').textContent  = fmtR(final);
+
+  document.getElementById('s6sum').innerHTML = `
+  <table class="tbl">
+    <tbody>
+      <tr><td>Profile</td><td class="num">${fmtR(c.profCost||0)}</td></tr>
+      <tr><td>Backing Sheet</td><td class="num">${fmtR(c.sheetCost||0)}</td></tr>
+      <tr><td>Accessories</td><td class="num">${fmtR(c.accCost||0)}</td></tr>
+      <tr><td>LED ${ST.ledMode==='bar'?'Bars':'Modules'}</td><td class="num">${fmtR(c.ledCost||0)}</td></tr>
+      <tr><td>LED Drivers</td><td class="num">${fmtR(c.drvCost||0)}</td></tr>
+      <tr><td>Printing &amp; Finishing</td><td class="num">${fmtR(c.printCost||0)}</td></tr>
+      <tr class="sub"><td><strong>Raw Material Cost (per sign)</strong></td><td class="num"><strong>${fmtR(raw)}</strong></td></tr>
+      <tr><td>Overhead (${ovhPct}%)</td><td class="num">${fmtR(ovh)}</td></tr>
+      <tr><td>Labour</td><td class="num">${fmtR(labour)}</td></tr>
+      <tr><td>Installation</td><td class="num">${fmtR(install)}</td></tr>
+      ${qty>1?`<tr><td>Cost per sign</td><td class="num">${fmtR(costPer)}</td></tr><tr><td>Quantity (× ${qty})</td><td class="num">× ${qty}</td></tr>`:''}
+      <tr class="sub"><td><strong>Total Production Cost</strong></td><td class="num"><strong>${fmtR(costAll)}</strong></td></tr>
+      <tr><td>Markup (${mkPct}%)</td><td class="num">${fmtR(sellBD-costAll)}</td></tr>
+      ${discAmt>0?`<tr><td>Discount (${discPct}%)</td><td class="num" style="color:var(--danger)">−${fmtR(discAmt)}</td></tr>`:''}
+      <tr class="sub"><td><strong>Selling Price (ex-GST)</strong></td><td class="num"><strong>${fmtR(sell)}</strong></td></tr>
+      <tr><td>GST ${gstPct}%</td><td class="num">${fmtR(gstAmt)}</td></tr>
+      <tr class="grand"><td><strong>Final Amount (incl. GST)</strong></td><td class="num"><strong>${fmtR(final)}</strong></td></tr>
+      <tr><td>Gross Margin</td><td class="num" style="color:var(--success);font-weight:600">${margin}% (${fmtR(mgnAmt)})</td></tr>
+      ${waste>0?`<tr><td>Scrap / Wastage</td><td class="num" style="color:var(--warn)">${fmtR(waste)}</td></tr>`:''}
+    </tbody>
+  </table>`;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   JS PART 3 — COST SHEET GENERATOR
+═══════════════════════════════════════════════════════════════ */
+function generateCostSheet(){
+  calcAll();
+  const c   = ST.calc;
+  const now = new Date();
+  // Read from actual HTML element IDs
+  const jobName = gv('s1job')||'—';
+  const quoteId = 'QUOTE-' + now.getFullYear() + '-' + String(now.getTime()).slice(-5);
+  const dimW    = gv('s2w')||ST.wMM||0;
+  const dimH    = gv('s2h')||ST.hMM||0;
+  const dimUnit = gv('s2unit')||'mm';
+  const rec = {
+    id:    now.getTime(),
+    date:  now.toLocaleString('en-IN'),
+    ref:   quoteId,
+    client:jobName,
+    cat:   gv('s1cat')||'—',
+    width: ST.wMM||0,
+    height:ST.hMM||0,
+    dimW:  dimW,
+    dimH:  dimH,
+    dimUnit: dimUnit,
+    qty:   parseInt(gv('s1qty'))||1,
+    sell:  c.sell||0,
+    final: c.final||0,
+    margin:c.margin||0,
+    data:  JSON.parse(JSON.stringify(c))
+  };
+  const hist = DB.get(KEYS.history,[]);
+  hist.unshift(rec);
+  DB.set(KEYS.history, hist.slice(0,100));
+
+  const catLabel = {
+    'nonlit':'Non-Lit Sign',
+    'seg-indoor':'SEG / Backlit Indoor',
+    'backlit-outdoor':'Backlit Outdoor',
+    'outdoor-illum':'Outdoor Illuminated'
+  }[rec.cat]||rec.cat;
+
+  const rows = r => r.map(([l,v])=>`<tr><td>${l}</td><td class="num">${v}</td></tr>`).join('');
+
+  let ledRows = '';
+  if(c.ledMode==='module' && c.modCount){
+    ledRows = rows([
+      ['LED Module Model', c.modModel||'—'],
+      ['Grid (Cols × Rows)', `${c.modCols} × ${c.modRows}`],
+      ['Total Modules', c.modCount],
+      ['Total LED Wattage', fmtR(c.modWatt||0)+' W'],
+      ['LED Module Cost', fmtR(c.ledCost||0)]
+    ]);
+  } else if(c.ledMode==='bar' && c.barCount){
+    ledRows = rows([
+      ['LED Bar Model', c.barModel||'—'],
+      ['Number of Bars (vertical)', c.barCount],
+      ['Pieces per Column', c.piecesPerCol||1],
+      ['Total Bar Pieces', c.totalBarPieces||0],
+      ['Total LED Wattage', fmtR(c.barWatt||0)+' W'],
+      ['LED Bar Cost', fmtR(c.ledCost||0)]
+    ]);
+  }
+
+  let drvRows = '';
+  if(c.drvResult){
+    const dr = c.drvResult;
+    drvRows = rows([
+      ['Driver Requirement', fmtR(dr.requiredW||0)+' W'],
+      ['Selected Driver', `${dr.count} × ${dr.driverW}W`],
+      ['Driver Utilisation', dr.util+'%'],
+      ['Driver Cost', fmtR(c.drvCost||0)]
+    ]);
+  }
+
+  let accRows = '';
+  if(c.accs && c.accs.length){
+    accRows = c.accs.filter(a=>a.qty>0).map(a=>`
+      <tr><td>${a.name}</td><td class="num">${a.qty} ${a.unit}</td><td class="num">${fmtR(a.unitCost)}</td><td class="num">${fmtR(a.qty*a.unitCost)}</td></tr>`).join('');
+  }
+
+  const html = `
+  <div class="cs-wrap">
+    <div class="cs-header">
+      <div>
+        <div class="cs-logo">SOFT SIGNAGE ERP</div>
+        <div style="font-size:0.85rem;color:var(--text-2)">Professional Costing System</div>
+      </div>
+      <div style="text-align:right">
+        <div style="font-size:1.1rem;font-weight:700">${rec.ref}</div>
+        <div style="font-size:0.85rem;color:var(--text-2)">${rec.date}</div>
+        <div style="font-size:0.85rem">Client: <strong>${rec.client}</strong></div>
+      </div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1.5rem">
+      <div class="card">
+        <div class="card-title">Sign Specification</div>
+        <table class="tbl">
+          <tbody>
+            ${rows([
+              ['Job / Customer', rec.client],
+              ['Quote Ref', rec.ref],
+              ['Category', catLabel],
+              ['Dimensions (entered)', `${rec.dimW} × ${rec.dimH} ${rec.dimUnit}`],
+              ['Dimensions (mm)', `${rec.width} × ${rec.height} mm`],
+              ['Area', ((rec.width/304.8)*(rec.height/304.8)).toFixed(3)+' sq.ft'],
+              ['Quantity', rec.qty+' pcs']
+            ])}
+          </tbody>
+        </table>
+      </div>
+      <div class="card">
+        <div class="card-title">Financial Summary</div>
+        <table class="tbl">
+          <tbody>
+            ${rows([
+              ['Material Cost', fmtR(c.raw||0)],
+              ['Selling Price (ex-GST)', fmtR(c.sell||0)],
+              ['GST Amount', fmtR(c.gstAmt||0)],
+              ['Final Amount (incl. GST)', '<strong>'+fmtR(c.final||0)+'</strong>'],
+              ['Gross Margin', c.margin+'%']
+            ])}
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    ${c.profCost ? `
+    <div class="card" style="margin-bottom:1rem">
+      <div class="card-title">Profile Costing (FFD Bin-Pack Optimised)</div>
+      <table class="tbl"><tbody>
+        ${rows([
+          ['Profile Type', c.profType||'—'],
+          ['Perimeter Cuts', `W:${c.profW}mm × 2, H:${c.profH}mm × 2`],
+          ['Stock Bar Length', (c.profStock||0)+' mm'],
+          ['Stock Bars Required', c.profBars||0],
+          ['Material Utilisation', (c.profUtil||0)+'%'],
+          ['Profile Cost', fmtR(c.profCost)]
+        ])}
+      </tbody></table>
+    </div>` : ''}
+
+    ${c.sheetCost ? `
+    <div class="card" style="margin-bottom:1rem">
+      <div class="card-title">Backing Sheet (Area-Based Costing)</div>
+      <table class="tbl"><tbody>
+        ${rows([
+          ['Sheet Type', c.sheetType||'—'],
+          ['Sign Area', (c.signSqFt||0).toFixed(3)+' sq.ft'],
+          ['Wastage %', (c.sheetWaste||0)+'%'],
+          ['Chargeable Area', (c.chargeableSqFt||0).toFixed(3)+' sq.ft'],
+          ['Cost per sq.ft', fmtR(c.sheetCostPerSqFt||0)],
+          ['Sheet Cost', fmtR(c.sheetCost)]
+        ])}
+      </tbody></table>
+    </div>` : ''}
+
+    ${ledRows ? `
+    <div class="card" style="margin-bottom:1rem">
+      <div class="card-title">LED Illumination</div>
+      <table class="tbl"><tbody>${ledRows}</tbody></table>
+    </div>` : ''}
+
+    ${drvRows ? `
+    <div class="card" style="margin-bottom:1rem">
+      <div class="card-title">LED Driver</div>
+      <table class="tbl"><tbody>${drvRows}</tbody></table>
+    </div>` : ''}
+
+    ${c.printCost ? `
+    <div class="card" style="margin-bottom:1rem">
+      <div class="card-title">Printing & Finishing</div>
+      <table class="tbl"><tbody>
+        ${rows([
+          ['Print Media', c.printMedia||'—'],
+          ['Print Area', (c.printSqFt||0).toFixed(3)+' sq.ft'],
+          ['Print Cost/sq.ft', fmtR(c.printCostPerSqFt||0)],
+          ['Finishing', c.finishing||'None'],
+          ['Print Cost', fmtR(c.printCost)]
+        ])}
+      </tbody></table>
+    </div>` : ''}
+
+    ${accRows ? `
+    <div class="card" style="margin-bottom:1rem">
+      <div class="card-title">Accessories</div>
+      <table class="tbl">
+        <thead><tr><th>Item</th><th>Qty</th><th>Unit Cost</th><th>Total</th></tr></thead>
+        <tbody>${accRows}</tbody>
+        <tfoot><tr><td colspan="3"><strong>Accessories Total</strong></td><td class="num"><strong>${fmtR(c.accCost||0)}</strong></td></tr></tfoot>
+      </table>
+    </div>` : ''}
+
+    <div class="card" style="margin-bottom:1rem">
+      <div class="card-title">Cost Build-Up</div>
+      <table class="tbl"><tbody>
+        ${rows([
+          ['Raw Material Cost', fmtR(c.raw||0)],
+          ['Overhead ('+c.ovhPct+'%)', fmtR(c.ovh||0)],
+          ['Labour', fmtR(c.labour||0)],
+          ['Installation', fmtR(c.install||0)],
+          ['Total Production Cost', '<strong>'+fmtR(c.costAll||0)+'</strong>'],
+          ['Markup ('+c.mkPct+'%)', fmtR((c.sellBD||0)-(c.costAll||0))],
+          ...(c.discAmt>0 ? [['Discount ('+c.discPct+'%)', '−'+fmtR(c.discAmt)]] : []),
+          ['Selling Price (ex-GST)', '<strong>'+fmtR(c.sell||0)+'</strong>'],
+          ['GST '+c.gstPct+'%', fmtR(c.gstAmt||0)],
+          ['Final Amount (incl. GST)', '<strong>'+fmtR(c.final||0)+'</strong>'],
+          ['Gross Margin', c.margin+'% ('+fmtR(c.mgnAmt||0)+')']
+        ])}
+      </tbody></table>
+    </div>
+
+    <div style="text-align:center;font-size:0.78rem;color:var(--text-3);margin-top:2rem;padding-top:1rem;border-top:1px solid var(--border)">
+      Generated by Soft Signage ERP • ${rec.date} • This is a system-generated estimate
+    </div>
+  </div>`;
+
+  document.getElementById('csContent').innerHTML = html;
+  showPage('costsheet');
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   JS PART 4 — MASTER TABLE RENDERERS
+   (tbody IDs: tbProfiles, tbLedMod, tbLedBar, tbDrv, tbSheets, tbPrint, tbAcc)
+═══════════════════════════════════════════════════════════════ */
+function renderMT(key){
+  const cfgs = {
+    profiles: {
+      tbId:'tbProfiles',
+      row: r => `
+        <td>${r.name}</td>
+        <td class="num">${r.width||'—'}</td>
+        <td class="num">${r.depth||'—'}</td>
+        <td class="num">${r.stockLen||4000}</td>
+        <td>${r.category||'—'}</td>
+        <td style="font-size:11px">${r.sku||'—'}</td>
+        <td style="font-size:11px">${r.supplier||'—'}</td>
+        <td class="num">₹${r.cost}</td>
+        <td><span class="badge ${r.active!==false?'badge-ok':'badge-off'}">${r.active!==false?'Active':'Off'}</span></td>
+        <td class="actions">
+          <button class="btn btn-sm" onclick="openMod('mod-profile','${r.id}')">Edit</button>
+          <button class="btn btn-sm btn-danger" onclick="confirmDelete('profiles','${r.id}','${r.name.replace(/'/g,"\\'")}')">Del</button>
+        </td>`
+    },
+    ledMods: {
+      tbId:'tbLedMod',
+      row: r => `
+        <td>${r.name}</td>
+        <td class="num">${r.modW}×${r.modH}</td>
+        <td class="num">${r.hGap}/${r.vGap}</td>
+        <td class="num">${r.watt}W</td>
+        <td>${r.ip||'—'}</td>
+        <td>${r.usage||'—'}</td>
+        <td style="font-size:11px">${r.sku||'—'}</td>
+        <td class="num">₹${r.cost}</td>
+        <td><span class="badge ${r.active!==false?'badge-ok':'badge-off'}">${r.active!==false?'Active':'Off'}</span></td>
+        <td class="actions">
+          <button class="btn btn-sm" onclick="openMod('mod-lm','${r.id}')">Edit</button>
+          <button class="btn btn-sm btn-danger" onclick="confirmDelete('ledMods','${r.id}','${r.name.replace(/'/g,"\\'")}')">Del</button>
+        </td>`
+    },
+    ledBars: {
+      tbId:'tbLedBar',
+      row: r => `
+        <td>${r.name}</td>
+        <td class="num">${r.barLen}</td>
+        <td class="num">${r.barWidth}</td>
+        <td class="num">${r.watt}W</td>
+        <td>${r.ip||'—'}</td>
+        <td>${r.usage||'—'}</td>
+        <td style="font-size:11px">${r.sku||'—'}</td>
+        <td class="num">₹${r.cost}</td>
+        <td><span class="badge ${r.active!==false?'badge-ok':'badge-off'}">${r.active!==false?'Active':'Off'}</span></td>
+        <td class="actions">
+          <button class="btn btn-sm" onclick="openMod('mod-lb','${r.id}')">Edit</button>
+          <button class="btn btn-sm btn-danger" onclick="confirmDelete('ledBars','${r.id}','${r.name.replace(/'/g,"\\'")}')">Del</button>
+        </td>`
+    },
+    drivers: {
+      tbId:'tbDrv',
+      row: r => `
+        <td class="num">${r.watt}W</td>
+        <td>${r.brand||'—'}</td>
+        <td class="num">${r.volt||24}V</td>
+        <td style="font-size:11px">${r.sku||'—'}</td>
+        <td style="font-size:11px">${r.supplier||'—'}</td>
+        <td class="num">₹${r.cost}</td>
+        <td><span class="badge ${r.active!==false?'badge-ok':'badge-off'}">${r.active!==false?'Active':'Off'}</span></td>
+        <td class="actions">
+          <button class="btn btn-sm" onclick="openMod('mod-drv','${r.id}')">Edit</button>
+          <button class="btn btn-sm btn-danger" onclick="confirmDelete('drivers','${r.id}','${r.watt}W Driver')">Del</button>
+        </td>`
+    },
+    sheets: {
+      tbId:'tbSheets',
+      row: r => {
+        const sqft = (r.width/304.8)*(r.height/304.8);
+        const perSqFt = sqft>0 ? (r.costPerSheet/sqft).toFixed(2) : '—';
+        return `
+        <td>${r.name}</td>
+        <td class="num">${r.width}×${r.height}</td>
+        <td class="num">${r.thickness||'—'}mm</td>
+        <td class="num">${r.wastage||15}%</td>
+        <td style="font-size:11px">${r.sku||'—'}</td>
+        <td style="font-size:11px">${r.supplier||'—'}</td>
+        <td class="num">₹${r.costPerSheet}</td>
+        <td class="num">₹${perSqFt}</td>
+        <td><span class="badge ${r.active!==false?'badge-ok':'badge-off'}">${r.active!==false?'Active':'Off'}</span></td>
+        <td class="actions">
+          <button class="btn btn-sm" onclick="openMod('mod-sheet','${r.id}')">Edit</button>
+          <button class="btn btn-sm btn-danger" onclick="confirmDelete('sheets','${r.id}','${r.name.replace(/'/g,"\\'")}')">Del</button>
+        </td>`;
+      }
+    },
+    printing: {
+      tbId:'tbPrint',
+      row: r => `
+        <td>${r.name}</td>
+        <td style="font-size:11px">${Array.isArray(r.printTypes)?r.printTypes.join(', '):(r.printTypes||'—')}</td>
+        <td class="num">${r.wastage||0}%</td>
+        <td style="font-size:11px">${r.sku||'—'}</td>
+        <td style="font-size:11px">${r.supplier||'—'}</td>
+        <td class="num">₹${r.costPerSqFt}</td>
+        <td><span class="badge ${r.active!==false?'badge-ok':'badge-off'}">${r.active!==false?'Active':'Off'}</span></td>
+        <td class="actions">
+          <button class="btn btn-sm" onclick="openMod('mod-print','${r.id}')">Edit</button>
+          <button class="btn btn-sm btn-danger" onclick="confirmDelete('printing','${r.id}','${r.name.replace(/'/g,"\\'")}')">Del</button>
+        </td>`
+    },
+    accMaster: {
+      tbId:'tbAcc',
+      row: r => `
+        <td>${r.name}</td>
+        <td>${r.unit||'pcs'}</td>
+        <td><span class="badge ${r.mandatory?'badge-warn':'badge-off'}">${r.mandatory?'Mandatory':'Optional'}</span></td>
+        <td style="font-size:11px">${r.sku||'—'}</td>
+        <td style="font-size:11px">${r.supplier||'—'}</td>
+        <td class="num">₹${r.unitCost}</td>
+        <td><span class="badge ${r.active!==false?'badge-ok':'badge-off'}">${r.active!==false?'Active':'Off'}</span></td>
+        <td class="actions">
+          <button class="btn btn-sm" onclick="openMod('mod-acc','${r.id}')">Edit</button>
+          <button class="btn btn-sm btn-danger" onclick="confirmDelete('accMaster','${r.id}','${r.name.replace(/'/g,"\\'")}')">Del</button>
+        </td>`
+    }
+  };
+
+  const cfg = cfgs[key];
+  if(!cfg) return;
+  const tbody = document.getElementById(cfg.tbId);
+  if(!tbody) return;
+  const items = M.get(key);
+  if(!items.length){
+    const cols = tbody.closest('table').querySelectorAll('th').length;
+    tbody.innerHTML = `<tr><td colspan="${cols}" style="text-align:center;color:var(--text3);padding:2rem">No records yet — click + Add to create one.</td></tr>`;
+    return;
+  }
+  tbody.innerHTML = items.map(r=>`<tr>${cfg.row(r)}</tr>`).join('');
+}
+
+function renderAllMasters(){
+  ['profiles','ledMods','ledBars','drivers','sheets','printing','accMaster'].forEach(k=>renderMT(k));
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   JS PART 5 — MODAL OPEN / SAVE / DELETE
+   Overlay IDs: mod-profile, mod-lm, mod-lb, mod-drv, mod-sheet, mod-print, mod-acc, mod-confirm
+═══════════════════════════════════════════════════════════════ */
+// Map overlay id → { key, hiddenId, fieldMap }
+const MOD_CFG = {
+  'mod-profile': {
+    key:'profiles', hiddenId:'mpId',
+    read: () => ({
+      name:     gv('mpName'),
+      category: gv('mpCat'),
+      width:    parseFloat(gv('mpWidth'))||0,
+      depth:    parseFloat(gv('mpDepth'))||0,
+      stockLen: parseFloat(gv('mpStock'))||4000,
+      usage:    gv('mpUsage'),
+      cost:     parseFloat(gv('mpCost'))||0,
+      sku:      gv('mpSku'),
+      supplier: gv('mpSupp'),
+      active:   gv('mpActive')!=='false'
+    }),
+    write: r => {
+      sv('mpName',r.name||''); sv('mpCat',r.category||'nonlit');
+      sv('mpWidth',r.width||''); sv('mpDepth',r.depth||'');
+      sv('mpStock',r.stockLen||4000); sv('mpUsage',r.usage||'Indoor');
+      sv('mpCost',r.cost||''); sv('mpSku',r.sku||''); sv('mpSupp',r.supplier||'');
+      sv('mpActive',r.active!==false?'true':'false');
+    },
+    validate: r => r.name && r.cost>0 && r.stockLen>0,
+    title: (edit) => edit?'Edit Profile':'Add Profile'
+  },
+  'mod-lm': {
+    key:'ledMods', hiddenId:'lmId',
+    read: () => ({
+      name:    gv('lmName'),
+      usage:   gv('lmUsage'),
+      modW:    parseFloat(gv('lmW'))||36,
+      modH:    parseFloat(gv('lmH'))||13,
+      hGap:    parseFloat(gv('lmHGap'))||50,
+      vGap:    parseFloat(gv('lmVGap'))||50,
+      watt:    parseFloat(gv('lmWatt'))||0,
+      ip:      gv('lmIP'),
+      cost:    parseFloat(gv('lmCost'))||0,
+      sku:     gv('lmSku'),
+      supplier:gv('lmSupp'),
+      active:  gv('lmActive')!=='false'
+    }),
+    write: r => {
+      sv('lmName',r.name||''); sv('lmUsage',r.usage||'Indoor');
+      sv('lmW',r.modW||36); sv('lmH',r.modH||13);
+      sv('lmHGap',r.hGap||50); sv('lmVGap',r.vGap||50);
+      sv('lmWatt',r.watt||0); sv('lmIP',r.ip||'IP20');
+      sv('lmCost',r.cost||''); sv('lmSku',r.sku||''); sv('lmSupp',r.supplier||'');
+      sv('lmActive',r.active!==false?'true':'false');
+    },
+    validate: r => r.name && r.cost>0,
+    title: (edit) => edit?'Edit LED Module':'Add LED Module'
+  },
+  'mod-lb': {
+    key:'ledBars', hiddenId:'lbId',
+    read: () => ({
+      name:    gv('lbName'),
+      usage:   gv('lbUsage'),
+      barLen:  parseFloat(gv('lbLen'))||1200,
+      barWidth:parseFloat(gv('lbWidth'))||15,
+      watt:    parseFloat(gv('lbWatt'))||0,
+      ip:      gv('lbIP'),
+      cost:    parseFloat(gv('lbCost'))||0,
+      sku:     gv('lbSku'),
+      supplier:gv('lbSupp'),
+      active:  gv('lbActive')!=='false'
+    }),
+    write: r => {
+      sv('lbName',r.name||''); sv('lbUsage',r.usage||'Both');
+      sv('lbLen',r.barLen||1200); sv('lbWidth',r.barWidth||15);
+      sv('lbWatt',r.watt||0); sv('lbIP',r.ip||'IP65');
+      sv('lbCost',r.cost||''); sv('lbSku',r.sku||''); sv('lbSupp',r.supplier||'');
+      sv('lbActive',r.active!==false?'true':'false');
+    },
+    validate: r => r.name && r.cost>0 && r.barLen>0,
+    title: (edit) => edit?'Edit LED Bar':'Add LED Bar'
+  },
+  'mod-drv': {
+    key:'drivers', hiddenId:'drvId',
+    read: () => ({
+      watt:    parseFloat(gv('drvWatt'))||0,
+      brand:   gv('drvBrand'),
+      volt:    parseFloat(gv('drvVolt'))||24,
+      cost:    parseFloat(gv('drvCost'))||0,
+      sku:     gv('drvSku'),
+      supplier:gv('drvSupp'),
+      active:  gv('drvActive')!=='false'
+    }),
+    write: r => {
+      sv('drvWatt',r.watt||''); sv('drvBrand',r.brand||'');
+      sv('drvVolt',r.volt||24); sv('drvCost',r.cost||'');
+      sv('drvSku',r.sku||''); sv('drvSupp',r.supplier||'');
+      sv('drvActive',r.active!==false?'true':'false');
+    },
+    validate: r => r.watt>0 && r.cost>0,
+    title: (edit) => edit?'Edit Driver':'Add Driver'
+  },
+  'mod-sheet': {
+    key:'sheets', hiddenId:'shId',
+    read: () => ({
+      name:        gv('shName'),
+      thickness:   parseFloat(gv('shThick'))||3,
+      width:       parseFloat(gv('shW'))||1220,
+      height:      parseFloat(gv('shH'))||2440,
+      wastage:     parseFloat(gv('shWaste'))||15,
+      costPerSheet:parseFloat(gv('shCost'))||0,
+      sku:         gv('shSku'),
+      supplier:    gv('shSupp'),
+      active:      gv('shActive')!=='false'
+    }),
+    write: r => {
+      sv('shName',r.name||''); sv('shThick',r.thickness||3);
+      sv('shW',r.width||1220); sv('shH',r.height||2440);
+      sv('shWaste',r.wastage||15); sv('shCost',r.costPerSheet||'');
+      sv('shSku',r.sku||''); sv('shSupp',r.supplier||'');
+      sv('shActive',r.active!==false?'true':'false');
+    },
+    validate: r => r.name && r.costPerSheet>0,
+    title: (edit) => edit?'Edit Sheet Material':'Add Sheet Material'
+  },
+  'mod-print': {
+    key:'printing', hiddenId:'prId',
+    read: () => ({
+      name:        gv('prName'),
+      wastage:     parseFloat(gv('prWaste'))||8,
+      printTypes:  gv('prTypes').split(',').map(s=>s.trim()).filter(Boolean),
+      costPerSqFt: parseFloat(gv('prCost'))||0,
+      sku:         gv('prSku'),
+      supplier:    gv('prSupp'),
+      active:      gv('prActive')!=='false'
+    }),
+    write: r => {
+      sv('prName',r.name||''); sv('prWaste',r.wastage||8);
+      sv('prTypes',Array.isArray(r.printTypes)?r.printTypes.join(', '):(r.printTypes||''));
+      sv('prCost',r.costPerSqFt||''); sv('prSku',r.sku||''); sv('prSupp',r.supplier||'');
+      sv('prActive',r.active!==false?'true':'false');
+    },
+    validate: r => r.name && r.costPerSqFt>0,
+    title: (edit) => edit?'Edit Print Media':'Add Print Media'
+  },
+  'mod-acc': {
+    key:'accMaster', hiddenId:'acId',
+    read: () => ({
+      name:     gv('acName'),
+      unit:     gv('acUnit')||'pcs',
+      mandatory:gv('acMand')==='true',
+      unitCost: parseFloat(gv('acCost'))||0,
+      sku:      gv('acSku'),
+      supplier: gv('acSupp'),
+      active:   gv('acActive')!=='false'
+    }),
+    write: r => {
+      sv('acName',r.name||''); sv('acUnit',r.unit||'pcs');
+      sv('acMand',r.mandatory?'true':'false');
+      sv('acCost',r.unitCost||''); sv('acSku',r.sku||''); sv('acSupp',r.supplier||'');
+      sv('acActive',r.active!==false?'true':'false');
+    },
+    validate: r => r.name && r.unitCost>=0,
+    title: (edit) => edit?'Edit Accessory':'Add Accessory'
+  }
+};
+
+function openMod(modId, recId){
+  const cfg = MOD_CFG[modId];
+  if(!cfg){ console.warn('Unknown modal:', modId); return; }
+  const overlay = document.getElementById(modId);
+  if(!overlay) return;
+
+  // Clear hidden id field
+  const hidEl = document.getElementById(cfg.hiddenId);
+  if(hidEl) hidEl.value = '';
+
+  // Update title
+  const titleId = 'mh'+modId.replace('mod-','').replace(/(^|\-)(\w)/g,(_,a,b)=>b.toUpperCase());
+  const titles = {'mod-profile':'mhProfile','mod-lm':'mhLm','mod-lb':'mhLb',
+                  'mod-drv':'mhDrv','mod-sheet':'mhSheet','mod-print':'mhPrint','mod-acc':'mhAcc'};
+  const titleEl = document.getElementById(titles[modId]);
+  if(titleEl) titleEl.textContent = cfg.title(!!recId);
+
+  if(recId){
+    const rec = M.get(cfg.key).find(r => String(r.id) === String(recId));
+    if(rec){
+      if(hidEl) hidEl.value = recId;
+      cfg.write(rec);
+    }
+  }
+  overlay.style.display = 'flex';
+}
+
+function closeMod(modId){
+  const el = document.getElementById(modId);
+  if(el) el.style.display = 'none';
+}
+
+function _saveMod(modId){
+  const cfg = MOD_CFG[modId];
+  if(!cfg) return;
+  const rec  = cfg.read();
+  if(!cfg.validate(rec)){
+    alert('Please fill in all required fields (marked *).');
+    return;
+  }
+  const hidEl  = document.getElementById(cfg.hiddenId);
+  const editId = hidEl ? hidEl.value : '';
+  if(editId){
+    M.update(cfg.key, editId, rec);
+  } else {
+    rec.id = 'id_' + Date.now();
+    rec.updatedAt = new Date().toISOString();
+    M.add(cfg.key, rec);
+  }
+  closeMod(modId);
+  renderMT(cfg.key);
+  populateDropdowns();
+}
+
+// Convenience wrappers called from HTML buttons
+function saveProfile(){ _saveMod('mod-profile'); }
+function saveLedMod()  { _saveMod('mod-lm'); }
+function saveLedBar()  { _saveMod('mod-lb'); }
+function saveDrv()     { _saveMod('mod-drv'); }
+function saveSheet()   { _saveMod('mod-sheet'); }
+function savePrint()   { _saveMod('mod-print'); }
+function saveAcc()     { _saveMod('mod-acc'); }
+
+let _delKey = null, _delId = null;
+function confirmDelete(key, id, label){
+  _delKey = key; _delId = id;
+  const msg = document.getElementById('confirmMsg');
+  if(msg) msg.textContent = 'Delete "' + label + '"? This cannot be undone.';
+  const btn = document.getElementById('confirmOK');
+  if(btn) btn.onclick = doDelete;
+  const overlay = document.getElementById('mod-confirm');
+  if(overlay) overlay.style.display = 'flex';
+}
+function doDelete(){
+  if(_delKey && _delId){
+    M.del(_delKey, _delId);
+    renderMT(_delKey);
+    populateDropdowns();
+  }
+  _delKey = null; _delId = null;
+  closeMod('mod-confirm');
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   JS PART 6 — DROPDOWN POPULATORS
+═══════════════════════════════════════════════════════════════ */
+function populateDropdowns(){
+  function refill(selId, blank, items, fn){
+    const sel = document.getElementById(selId);
+    if(!sel) return;
+    const cur = sel.value;
+    sel.innerHTML = `<option value="">${blank}</option>` + items.map(fn).join('');
+    if(cur) sel.value = cur;
+  }
+
+  // Profile dropdown (s1profile) — field: name, stockLen, cost
+  refill('s1profile', '— select profile —', M.active('profiles'),
+    p => `<option value="${p.id}">${p.name} (${p.stockLen||4000}mm stock · ₹${p.cost})</option>`);
+
+  // Sheet dropdown (s3sheet) — field: name, width, height, costPerSheet
+  refill('s3sheet', '— select —', M.active('sheets'),
+    s => `<option value="${s.id}">${s.name} (${s.width}×${s.height}mm · ₹${s.costPerSheet}/sheet)</option>`);
+
+  // LED Module dropdown (s4modType) — field: name, modW, modH, watt, cost
+  refill('s4modType', '— select —', M.active('ledMods'),
+    m => `<option value="${m.id}">${m.name} (${m.modW}×${m.modH}mm · ${m.watt}W · ₹${m.cost})</option>`);
+
+  // LED Bar dropdown (s4barType) — field: name, barLen, watt, cost
+  refill('s4barType', '— select —', M.active('ledBars'),
+    b => `<option value="${b.id}">${b.name} (${b.barLen}mm · ${b.watt}W · ₹${b.cost})</option>`);
+
+  // Print media dropdown (s5media) — field: name, costPerSqFt
+  refill('s5media', '— select —', M.active('printing'),
+    p => `<option value="${p.id}">${p.name} (₹${p.costPerSqFt}/sq.ft)</option>`);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   JS PART 7 — DASHBOARD, HISTORY, CSV, RESET
+═══════════════════════════════════════════════════════════════ */
+function renderDash(){
+  const hist = DB.get(KEYS.history,[]);
+
+  // Update top metric cards
+  const totalRev  = hist.reduce((s,h)=>s+(h.final||0),0);
+  const totalMat  = hist.reduce((s,h)=>s+(h.data&&h.data.raw||0),0);
+  const totalWaste= hist.reduce((s,h)=>s+(h.data&&h.data.waste||0),0);
+  const avgMargin = hist.length ? rnd(hist.reduce((s,h)=>s+(h.margin||0),0)/hist.length) : 0;
+
+  const set = (id,v) => { const e=document.getElementById(id); if(e) e.textContent=v; };
+  set('dbMat',    fmtR(totalMat));
+  set('dbWaste',  fmtR(totalWaste));
+  set('dbMargin', avgMargin+'%');
+  set('dbSell',   fmtR(totalRev));
+
+  const brk = document.getElementById('dbBreak');
+  if(!brk) return;
+
+  if(!hist.length){
+    brk.innerHTML = `<div style="text-align:center;padding:2rem;color:var(--text3)">
+      <p>No quotes yet. <a href="#" onclick="showPage('estimator');return false">Create your first estimate</a></p>
+    </div>`;
+    return;
+  }
+
+  const catCount = {};
+  hist.forEach(h=>{ catCount[h.cat]=(catCount[h.cat]||0)+1; });
+
+  brk.innerHTML = `
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+      <div>
+        <div class="sdiv">Category Breakdown</div>
+        <table class="tbl"><tbody>
+          ${Object.entries(catCount).map(([c,n])=>`<tr><td>${c}</td><td class="num">${n} quote${n>1?'s':''}</td></tr>`).join('')}
+        </tbody></table>
+      </div>
+      <div>
+        <div class="sdiv">Recent Quotes</div>
+        <table class="tbl">
+          <thead><tr><th>Ref</th><th>Client</th><th>Amount</th></tr></thead>
+          <tbody>
+            ${hist.slice(0,6).map(h=>`
+              <tr><td style="font-size:11px">${h.ref}</td><td style="font-size:11px">${h.client||'—'}</td><td class="num">${fmtR(h.final||0)}</td></tr>`).join('')}
+          </tbody>
+        </table>
+      </div>
+    </div>`;
+}
+
+function renderHist(){
+  const hist = DB.get(KEYS.history,[]);
+  const el = document.getElementById('histContent');
+  if(!el) return;
+
+  if(!hist.length){
+    el.innerHTML = `<p style="color:var(--text3);font-size:12px;padding:8px">No saved estimates.</p>`;
+    return;
+  }
+
+  const rows = hist.map(h=>`
+    <tr>
+      <td style="font-size:11px">${h.ref}</td>
+      <td>${h.client||'—'}</td>
+      <td style="font-size:11px">${h.cat||'—'}</td>
+      <td class="num">${h.width||0}×${h.height||0}</td>
+      <td class="num">${h.qty||1}</td>
+      <td class="num">${fmtR(h.sell||0)}</td>
+      <td class="num" style="color:var(--success)">${h.margin||0}%</td>
+      <td class="num"><strong>${fmtR(h.final||0)}</strong></td>
+    </tr>`).join('');
+
+  el.innerHTML = `
+    <div style="overflow-x:auto">
+      <table class="tbl">
+        <thead><tr>
+          <th>Ref No.</th><th>Client</th><th>Category</th>
+          <th>Size (mm)</th><th>Qty</th>
+          <th>Sell Price</th><th>Margin</th><th>Final (incl. GST)</th>
+        </tr></thead>
+        <tbody>${rows}</tbody>
+      </table>
+    </div>`;
+}
+
+function clearHist(){
+  if(!confirm('Clear all quote history? This cannot be undone.')) return;
+  DB.set(KEYS.history,[]);
+  renderHist();
+  renderDash();
+}
+
+function exportCSV(){
+  const hist = DB.get(KEYS.history,[]);
+  if(!hist.length){ alert('No history to export.'); return; }
+
+  const hdr = ['Ref','Client','Category','Width(mm)','Height(mm)','Qty','Selling Price','Final Amount','Margin%','Date'];
+  const rows = hist.map(h=>[
+    h.ref, h.client||'', h.cat||'',
+    h.width||0, h.height||0, h.qty,
+    (h.sell||0).toFixed(2), (h.final||0).toFixed(2), (h.margin||0).toFixed(1),
+    h.date
+  ].map(v=>`"${String(v).replace(/"/g,'""')}"`).join(','));
+
+  const csv = [hdr.join(','), ...rows].join('\n');
+  const blob = new Blob([csv], {type:'text/csv'});
+  const url  = URL.createObjectURL(blob);
+  const a    = document.createElement('a');
+  a.href = url;
+  a.download = 'SignERP_History_'+new Date().toISOString().slice(0,10)+'.csv';
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+function resetEst(){
+  if(!confirm('Reset the estimator? All unsaved data will be lost.')) return;
+  ST.calc = {};
+  // Reset all inputs
+  document.querySelectorAll('#pg-estimator input, #pg-estimator select, #pg-estimator textarea').forEach(el=>{
+    if(el.type==='checkbox') el.checked = false;
+    else if(el.type==='radio') el.checked = false;
+    else el.value = el.dataset.default||'';
+  });
+  // Re-apply defaults
+  sv('s6gst','18');
+  sv('s1qty','1');
+  document.getElementById('pcMat').textContent    = '₹0.00';
+  document.getElementById('pcSell').textContent   = '₹0.00';
+  document.getElementById('pcMargin').textContent = '0%';
+  document.getElementById('pcFinal').textContent  = '₹0.00';
+  document.getElementById('s6sum').innerHTML = '';
+  goStep(1);
+  onCatChange();
+}
+
+function exportMasterCSV(key){
+  const items = M.get(key);
+  if(!items.length){ alert('No records to export.'); return; }
+  const hdr = Object.keys(items[0]).join(',');
+  const rows = items.map(r=>Object.values(r).map(v=>`"${String(v).replace(/"/g,'""')}"`).join(','));
+  const csv  = [hdr,...rows].join('\n');
+  const blob = new Blob([csv],{type:'text/csv'});
+  const url  = URL.createObjectURL(blob);
+  const a    = document.createElement('a');
+  a.href = url;
+  a.download = key+'_export.csv';
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   JS PART 8 — INIT, DEFAULTS SEEDING, KEYBOARD NAV
+═══════════════════════════════════════════════════════════════ */
+function seedDefaults(){
+  // Seed each master from the built-in DEFAULTS if localStorage is empty
+  Object.entries(KEYS).forEach(([shortKey, storageKey]) => {
+    if(shortKey === 'history') return;
+    const existing = DB.get(storageKey, null);
+    if(existing === null || existing.length === 0){
+      DB.set(storageKey, DEFAULTS[shortKey] || []);
+    }
+  });
+}
+
+function printCostSheet(){
+  // Ensure the cost-sheet page is active before printing so @media print shows it
+  const pg = document.getElementById('page-costsheet');
+  if(!pg || !pg.classList.contains('active')){
+    alert('Please generate the cost sheet first, then use Print / PDF.');
+    return;
+  }
+  // Temporarily expand any overflow-hidden ancestors so full content renders
+  const layout  = document.querySelector('.layout');
+  const main    = document.querySelector('.main');
+  const content = document.querySelector('.content');
+  const prev = {
+    lO: layout.style.overflow,   lH: layout.style.height,
+    mO: main.style.overflow,     mH: main.style.height,
+    cO: content.style.overflow,  cH: content.style.height,
+  };
+  layout.style.cssText  += ';overflow:visible!important;height:auto!important';
+  main.style.cssText    += ';overflow:visible!important;height:auto!important';
+  content.style.cssText += ';overflow:visible!important;height:auto!important';
+  window.print();
+  // Restore after print dialog closes
+  setTimeout(()=>{
+    layout.style.overflow  = prev.lO; layout.style.height  = prev.lH;
+    main.style.overflow    = prev.mO; main.style.height    = prev.mH;
+    content.style.overflow = prev.cO; content.style.height = prev.cH;
+  }, 500);
+}
+
+function toggleDark(){
+  document.body.classList.toggle('dark');
+  localStorage.setItem('SERP_dark', document.body.classList.contains('dark')?'1':'0');
+}
+
+function init(){
+  // Restore dark mode preference
+  if(localStorage.getItem('SERP_dark')==='1') document.body.classList.add('dark');
+
+  // Seed default master data on first run
+  seedDefaults();
+
+  // Render all master tables
+  renderAllMasters();
+
+  // Populate all estimator dropdowns
+  populateDropdowns();
+
+  // Set default UI state
+  onCatChange();
+  onLedModeChange();
+  sv('s6gst','18');
+  sv('s1qty','1');
+
+  // Default to Step 1
+  goStep(1);
+
+  // Open dashboard on load
+  showPage('dashboard');
+  renderDash();
+
+  // Close modals on backdrop click
+  document.querySelectorAll('.overlay').forEach(m=>{
+    m.addEventListener('click', e=>{
+      if(e.target===m) m.style.display='none';
+    });
+  });
+
+  // Keyboard: Escape closes modals
+  document.addEventListener('keydown', e=>{
+    if(e.key==='Escape'){
+      document.querySelectorAll('.overlay[style*="flex"]').forEach(m=>m.style.display='none');
+    }
+  });
+
+  // Nav link active state
+  document.querySelectorAll('.nav-link').forEach(link=>{
+    link.addEventListener('click', ()=>{
+      document.querySelectorAll('.nav-link').forEach(l=>l.classList.remove('active'));
+      link.classList.add('active');
+    });
+  });
+
+  console.log('%c Soft Signage ERP v2 initialised', 'color:#6c63ff;font-size:14px;font-weight:bold');
+}
+
+// Wire up init on DOM ready
+document.addEventListener('DOMContentLoaded', init);
+</script>
+</body>
+</html>
