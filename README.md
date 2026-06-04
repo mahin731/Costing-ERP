@@ -55,7 +55,7 @@ Or host it on GitHub Pages — no configuration needed.
 
 ## Live Demo
 
-> `https://yourusername.github.io/SignERP/SignERP_v2.html`
+> https://github.com/mahin731/Costing-ERP
 
 ---
 
