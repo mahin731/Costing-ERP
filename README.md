@@ -54,7 +54,7 @@ Or host it on GitHub Pages — no configuration needed.
 ---
 
 ## 🔗 Live Demo
-[Open SignERP v2](https://mahin731.github.io/Costing-ERP/SignERP_v2.html)
+[Open SignERP v2](https://mahin-aeroai.github.io/Costing-ERP/SignERP_v2.html)
 
 ---
 
